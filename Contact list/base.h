@@ -285,8 +285,12 @@ namespace CppCLRWinFormsProject {
 #pragma endregion
 	//При нажатии на кнопку добавления вызывается форма добавления контакта
 	private: System::Void add_contact_Click(System::Object^ sender, System::EventArgs^ e) {
+		int start_length = contacts->Length;
 		add_form^ adf = gcnew add_form;
 		adf->ShowDialog();
+		adf->get_data(contacts);
+		if (start_length != contacts->Length)
+			dgv->Rows->Add(contacts[contacts->Length - 1]->surname, contacts[contacts->Length - 1]->name, contacts[contacts->Length - 1]->patronymic, contacts[contacts->Length - 1]->phone, contacts[contacts->Length - 1]->email);
 	}
 	//При нажатии на иконку телефона, вызывается/скрывается меню
 	private: System::Void Menu_Click(System::Object^ sender, System::EventArgs^ e) {

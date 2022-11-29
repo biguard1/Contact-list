@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "Functions.h"
 
 namespace CppCLRWinFormsProject {
 
@@ -14,6 +15,7 @@ namespace CppCLRWinFormsProject {
 	/// </summary>
 	public ref class add_form : public System::Windows::Forms::Form
 	{
+	private: bool accept_data = 0;
 	public:
 		add_form(void)
 		{
@@ -147,6 +149,7 @@ namespace CppCLRWinFormsProject {
 			this->accept->Text = L"✓";
 			this->toolTip1->SetToolTip(this->accept, L"Принять");
 			this->accept->UseVisualStyleBackColor = false;
+			this->accept->Click += gcnew System::EventHandler(this, &add_form::accept_Click);
 			// 
 			// tableLayoutPanel2
 			// 
@@ -309,6 +312,22 @@ namespace CppCLRWinFormsProject {
 
 		}
 #pragma endregion
+	public: System::Void get_data(array<Contact^>^% contacts)
+	{
+		if (accept_data)
+		{
+			if (Surname->Text->Length || Forename->Text->Length || Patronymic->Text->Length || Phone->Text->Length || Email->Text->Length)
+			{
+				contacts->Resize(contacts, contacts->Length + 1);
+				contacts[contacts->Length - 1] = gcnew Contact;
+				contacts[contacts->Length - 1]->surname = Surname->Text;
+				contacts[contacts->Length - 1]->name = Forename->Text;
+				contacts[contacts->Length - 1]->patronymic = Patronymic->Text;
+				contacts[contacts->Length - 1]->phone = Phone->Text;
+				contacts[contacts->Length - 1]->email = Email->Text;
+			}
+		}
+	}
 	private: System::Void Name_KeyPress(System::Object^ sender, System::Windows::Forms::KeyPressEventArgs^ e) {
 		if (!Char::IsLetter(e->KeyChar) && e->KeyChar != 0x08)
 			e->Handled = true;
@@ -320,9 +339,29 @@ namespace CppCLRWinFormsProject {
 	}
 	private: System::Void Email_KeyPress(System::Object^ sender, System::Windows::Forms::KeyPressEventArgs^ e) {
 		if (e->KeyChar == '@' && !Email->Text->Contains("@") && Email->SelectionStart != 0);
-		else if (e->KeyChar == '.' && Email->SelectionStart != 0);
+		else if (e->KeyChar == '.' && Email->SelectionStart != 0)
+		{
+			if (Email->Text[Email->SelectionStart - 1] == '.') e->Handled = true;
+			else if (Email->SelectionStart != Email->Text->Length)
+				if (Email->Text[Email->SelectionStart] == '.') e->Handled = true;
+		}
 		else if (!Char::IsLetter(e->KeyChar) && !Char::IsDigit(e->KeyChar) && e->KeyChar != 0x08 && e->KeyChar != '_' && e->KeyChar != '-')
 			e->Handled = true;
 	}
-};
+	private: System::Void accept_Click(System::Object^ sender, System::EventArgs^ e) {
+		if (Phone->Text == "+")
+		{
+			MessageBox::Show("Введён неправильный формат телефона", "Ошибка добавления контакта", MessageBoxButtons::OK, MessageBoxIcon::Error);
+			if (!email_load_check(Email->Text))
+				MessageBox::Show("Введён неправильный формат емейла", "Ошибка добавления контакта", MessageBoxButtons::OK, MessageBoxIcon::Error);
+		}
+		else if (!email_load_check(Email->Text))
+			MessageBox::Show("Введён неправильный формат емейла", "Ошибка добавления контакта", MessageBoxButtons::OK, MessageBoxIcon::Error);
+		else 
+		{
+			accept_data = 1;
+			Close();
+		}
+	}
+	};
 }
