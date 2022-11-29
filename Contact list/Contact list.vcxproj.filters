@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Resource Files\Images">
+      <UniqueIdentifier>{a74f5d32-6bbc-4fd5-ab1c-109cbc91e5f5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="app.rc">
@@ -53,6 +56,9 @@
   <ItemGroup>
     <Image Include="app.ico">
       <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\upload30.bmp">
+      <Filter>Resource Files\Images</Filter>
     </Image>
   </ItemGroup>
 </Project>

@@ -153,6 +153,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="app.ico" />
+    <Image Include="Images\upload30.bmp" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

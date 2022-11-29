@@ -25,6 +25,11 @@ namespace CppCLRWinFormsProject {
 			//TODO: Add the constructor code here
 			//
 			tableLayoutPanel2->Hide();
+			if (IO::File::Exists(".\\Images\\upload30.bmp"))
+			{
+				this->load->Text = L"";
+				this->load->Image = Image::FromFile(".\\Images\\upload30.bmp");
+			}
 		}
 
 	protected:
