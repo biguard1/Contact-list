@@ -90,15 +90,15 @@ namespace CppCLRWinFormsProject {
 			this->accept = (gcnew System::Windows::Forms::Button());
 			this->tableLayoutPanel2 = (gcnew System::Windows::Forms::TableLayoutPanel());
 			this->label1 = (gcnew System::Windows::Forms::Label());
+			this->label5 = (gcnew System::Windows::Forms::Label());
+			this->label4 = (gcnew System::Windows::Forms::Label());
+			this->Patronymic = (gcnew System::Windows::Forms::TextBox());
 			this->Surname = (gcnew System::Windows::Forms::TextBox());
 			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->Forename = (gcnew System::Windows::Forms::TextBox());
 			this->label3 = (gcnew System::Windows::Forms::Label());
-			this->Patronymic = (gcnew System::Windows::Forms::TextBox());
 			this->Phone = (gcnew System::Windows::Forms::TextBox());
-			this->label4 = (gcnew System::Windows::Forms::Label());
 			this->Email = (gcnew System::Windows::Forms::TextBox());
-			this->label5 = (gcnew System::Windows::Forms::Label());
 			this->toolTip1 = (gcnew System::Windows::Forms::ToolTip(this->components));
 			this->tableLayoutPanel1->SuspendLayout();
 			this->tableLayoutPanel2->SuspendLayout();
@@ -193,12 +193,49 @@ namespace CppCLRWinFormsProject {
 			this->label1->Text = L"Фамилия:";
 			this->label1->TextAlign = System::Drawing::ContentAlignment::BottomLeft;
 			// 
+			// label5
+			// 
+			this->label5->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Left));
+			this->label5->AutoSize = true;
+			this->label5->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label5->ForeColor = System::Drawing::Color::White;
+			this->label5->Location = System::Drawing::Point(3, 184);
+			this->label5->Name = L"label5";
+			this->label5->Size = System::Drawing::Size(57, 20);
+			this->label5->TabIndex = 6;
+			this->label5->Text = L"E-Mail:";
+			this->label5->TextAlign = System::Drawing::ContentAlignment::BottomLeft;
+			// 
+			// label4
+			// 
+			this->label4->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Left));
+			this->label4->AutoSize = true;
+			this->label4->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label4->ForeColor = System::Drawing::Color::White;
+			this->label4->Location = System::Drawing::Point(3, 138);
+			this->label4->Name = L"label4";
+			this->label4->Size = System::Drawing::Size(83, 20);
+			this->label4->TabIndex = 6;
+			this->label4->Text = L"Телефон:";
+			this->label4->TextAlign = System::Drawing::ContentAlignment::BottomLeft;
+			// 
+			// Patronymic
+			// 
+			this->Patronymic->Location = System::Drawing::Point(3, 115);
+			this->Patronymic->Name = L"Patronymic";
+			this->Patronymic->Size = System::Drawing::Size(88, 20);
+			this->Patronymic->TabIndex = 5;
+			this->Patronymic->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &add_form::Name_KeyPress);
+			// 
 			// Surname
 			// 
 			this->Surname->Location = System::Drawing::Point(3, 23);
 			this->Surname->Name = L"Surname";
 			this->Surname->Size = System::Drawing::Size(88, 20);
 			this->Surname->TabIndex = 1;
+			this->Surname->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &add_form::Name_KeyPress);
 			// 
 			// label2
 			// 
@@ -220,6 +257,7 @@ namespace CppCLRWinFormsProject {
 			this->Forename->Name = L"Forename";
 			this->Forename->Size = System::Drawing::Size(88, 20);
 			this->Forename->TabIndex = 3;
+			this->Forename->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &add_form::Name_KeyPress);
 			// 
 			// label3
 			// 
@@ -235,33 +273,13 @@ namespace CppCLRWinFormsProject {
 			this->label3->Text = L"Отчество:";
 			this->label3->TextAlign = System::Drawing::ContentAlignment::BottomLeft;
 			// 
-			// Patronymic
-			// 
-			this->Patronymic->Location = System::Drawing::Point(3, 115);
-			this->Patronymic->Name = L"Patronymic";
-			this->Patronymic->Size = System::Drawing::Size(88, 20);
-			this->Patronymic->TabIndex = 5;
-			// 
 			// Phone
 			// 
 			this->Phone->Location = System::Drawing::Point(3, 161);
 			this->Phone->Name = L"Phone";
 			this->Phone->Size = System::Drawing::Size(88, 20);
 			this->Phone->TabIndex = 7;
-			// 
-			// label4
-			// 
-			this->label4->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Left));
-			this->label4->AutoSize = true;
-			this->label4->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(204)));
-			this->label4->ForeColor = System::Drawing::Color::White;
-			this->label4->Location = System::Drawing::Point(3, 138);
-			this->label4->Name = L"label4";
-			this->label4->Size = System::Drawing::Size(83, 20);
-			this->label4->TabIndex = 6;
-			this->label4->Text = L"Телефон:";
-			this->label4->TextAlign = System::Drawing::ContentAlignment::BottomLeft;
+			this->Phone->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &add_form::Phone_KeyPress);
 			// 
 			// Email
 			// 
@@ -269,20 +287,7 @@ namespace CppCLRWinFormsProject {
 			this->Email->Name = L"Email";
 			this->Email->Size = System::Drawing::Size(88, 20);
 			this->Email->TabIndex = 7;
-			// 
-			// label5
-			// 
-			this->label5->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Left));
-			this->label5->AutoSize = true;
-			this->label5->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(204)));
-			this->label5->ForeColor = System::Drawing::Color::White;
-			this->label5->Location = System::Drawing::Point(3, 184);
-			this->label5->Name = L"label5";
-			this->label5->Size = System::Drawing::Size(57, 20);
-			this->label5->TabIndex = 6;
-			this->label5->Text = L"E-Mail:";
-			this->label5->TextAlign = System::Drawing::ContentAlignment::BottomLeft;
+			this->Email->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &add_form::Email_KeyPress);
 			// 
 			// add_form
 			// 
@@ -304,5 +309,20 @@ namespace CppCLRWinFormsProject {
 
 		}
 #pragma endregion
-	};
+	private: System::Void Name_KeyPress(System::Object^ sender, System::Windows::Forms::KeyPressEventArgs^ e) {
+		if (!Char::IsLetter(e->KeyChar) && e->KeyChar != 0x08)
+			e->Handled = true;
+	}
+	private: System::Void Phone_KeyPress(System::Object^ sender, System::Windows::Forms::KeyPressEventArgs^ e) {
+		if (e->KeyChar == '+' && !Phone->Text->Contains("+") && Phone->SelectionStart == 0);
+		else if (!Char::IsDigit(e->KeyChar) && e->KeyChar != 0x08)
+			e->Handled = true;
+	}
+	private: System::Void Email_KeyPress(System::Object^ sender, System::Windows::Forms::KeyPressEventArgs^ e) {
+		if (e->KeyChar == '@' && !Email->Text->Contains("@") && Email->SelectionStart != 0);
+		else if (e->KeyChar == '.' && Email->SelectionStart != 0);
+		else if (!Char::IsLetter(e->KeyChar) && !Char::IsDigit(e->KeyChar) && e->KeyChar != 0x08 && e->KeyChar != '_' && e->KeyChar != '-')
+			e->Handled = true;
+	}
+};
 }
