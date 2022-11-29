@@ -1,6 +1,7 @@
 #pragma once
 #include "Structures.h"
 
+//Проверка ФИО на правильность
 bool name_load_check(System::String^ name)
 {
 	for each (auto element in name)
@@ -10,6 +11,7 @@ bool name_load_check(System::String^ name)
 	return 1;
 }
 
+//Проверка телефона на правильность
 bool phone_load_check(System::String^ phone)
 {
 	if (phone == "+") return 0;
@@ -21,6 +23,7 @@ bool phone_load_check(System::String^ phone)
 	return 1;
 }
 
+//Проверка емейла на правильность
 bool email_load_check(System::String^ email)
 {
 	if (email->Length)

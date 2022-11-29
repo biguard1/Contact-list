@@ -16,7 +16,7 @@ namespace CppCLRWinFormsProject {
 	/// </summary>
 	public ref class base : public System::Windows::Forms::Form
 	{
-	public: array<Contact^>^ contacts = gcnew array<Contact^>(0);
+	public: array<Contact^>^ contacts = gcnew array<Contact^>(0); //Массив контактов
 	public:
 		base(void)
 		{

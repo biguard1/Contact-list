@@ -15,6 +15,7 @@ namespace CppCLRWinFormsProject {
 	/// </summary>
 	public ref class add_form : public System::Windows::Forms::Form
 	{
+	//Отображает, можно ли записывать значения из текстбоксов в массив
 	private: bool accept_data = 0;
 	public:
 		add_form(void)
@@ -312,6 +313,7 @@ namespace CppCLRWinFormsProject {
 
 		}
 #pragma endregion
+	//Заполняет массив контактов из текстбоксов
 	public: System::Void get_data(array<Contact^>^% contacts)
 	{
 		if (accept_data)
@@ -328,15 +330,18 @@ namespace CppCLRWinFormsProject {
 			}
 		}
 	}
+	//Ограничивает запись имени
 	private: System::Void Name_KeyPress(System::Object^ sender, System::Windows::Forms::KeyPressEventArgs^ e) {
 		if (!Char::IsLetter(e->KeyChar) && e->KeyChar != 0x08)
 			e->Handled = true;
 	}
+	//Ограничивает запись телефона
 	private: System::Void Phone_KeyPress(System::Object^ sender, System::Windows::Forms::KeyPressEventArgs^ e) {
 		if (e->KeyChar == '+' && !Phone->Text->Contains("+") && Phone->SelectionStart == 0);
 		else if (!Char::IsDigit(e->KeyChar) && e->KeyChar != 0x08)
 			e->Handled = true;
 	}
+	//Ограничивает запись емейла
 	private: System::Void Email_KeyPress(System::Object^ sender, System::Windows::Forms::KeyPressEventArgs^ e) {
 		if (e->KeyChar == '@' && !Email->Text->Contains("@") && Email->SelectionStart != 0);
 		else if (e->KeyChar == '.' && Email->SelectionStart != 0)
@@ -348,6 +353,7 @@ namespace CppCLRWinFormsProject {
 		else if (!Char::IsLetter(e->KeyChar) && !Char::IsDigit(e->KeyChar) && e->KeyChar != 0x08 && e->KeyChar != '_' && e->KeyChar != '-')
 			e->Handled = true;
 	}
+	//Если все текстбоксы прошли проверку, закрывает форму
 	private: System::Void accept_Click(System::Object^ sender, System::EventArgs^ e) {
 		if (Phone->Text == "+")
 		{
