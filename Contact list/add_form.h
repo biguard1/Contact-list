@@ -21,6 +21,7 @@ namespace CppCLRWinFormsProject {
 			//
 			//TODO: Add the constructor code here
 			//
+			this->Icon = Icon->ExtractAssociatedIcon(Application::ExecutablePath);
 		}
 
 	protected:

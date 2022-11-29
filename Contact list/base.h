@@ -30,6 +30,7 @@ namespace CppCLRWinFormsProject {
 				this->load->Text = L"";
 				this->load->Image = Image::FromFile(".\\Images\\upload30.bmp");
 			}
+			this->Icon = Icon->ExtractAssociatedIcon(Application::ExecutablePath);
 		}
 
 	protected:
