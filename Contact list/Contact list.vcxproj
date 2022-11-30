@@ -97,7 +97,7 @@
       </Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>xcopy "$(ProjectDir)Images" "$(OutDir)Images" /E /H /C /I</Command>
+      <Command>echo d | xcopy /s /y /c "$(ProjectDir)Images\*" "$(OutDir)Images"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -144,7 +144,7 @@
       </Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>xcopy "$(ProjectDir)Images" "$(OutDir)Images" /E /H /C /I</Command>
+      <Command>echo d | xcopy /s /y /c "$(ProjectDir)Images\*" "$(OutDir)Images"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
