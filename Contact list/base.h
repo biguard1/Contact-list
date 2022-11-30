@@ -173,6 +173,10 @@ namespace CppCLRWinFormsProject {
 			this->dgv->Name = L"dgv";
 			this->dgv->Size = System::Drawing::Size(585, 300);
 			this->dgv->TabIndex = 1;
+			this->dgv->CellEndEdit += gcnew System::Windows::Forms::DataGridViewCellEventHandler(this, &base::dgv_CellEndEdit);
+			this->dgv->EditingControlShowing += gcnew System::Windows::Forms::DataGridViewEditingControlShowingEventHandler(this, &base::dgv_EditingControlShowing);
+			this->dgv->RowsRemoved += gcnew System::Windows::Forms::DataGridViewRowsRemovedEventHandler(this, &base::dgv_RowsRemoved);
+			this->dgv->Sorted += gcnew System::EventHandler(this, &base::dgv_Sorted);
 			// 
 			// Surname
 			// 
@@ -283,6 +287,32 @@ namespace CppCLRWinFormsProject {
 
 		}
 #pragma endregion
+	//Добавление строки в список
+	private: System::Void add_row(Contact^% contact)
+	{
+		dgv->Rows->Add();
+		for (int i = 0; i != dgv->Columns->Count; i++)
+		{
+			if (dgv->Columns[i]->HeaderText == "Фамилия") dgv->Rows[dgv->Rows->Count - 1]->Cells[i]->Value = contact->surname;
+			else if (dgv->Columns[i]->HeaderText == "Имя") dgv->Rows[dgv->Rows->Count - 1]->Cells[i]->Value = contact->name;
+			else if (dgv->Columns[i]->HeaderText == "Отчество") dgv->Rows[dgv->Rows->Count - 1]->Cells[i]->Value = contact->patronymic;
+			else if (dgv->Columns[i]->HeaderText == "Телефон") dgv->Rows[dgv->Rows->Count - 1]->Cells[i]->Value = contact->phone;
+			else if (dgv->Columns[i]->HeaderText == "E-Mail") dgv->Rows[dgv->Rows->Count - 1]->Cells[i]->Value = contact->email;
+		}
+	}
+	//Синхронизация dgv с массивом
+	private: System::Void refresh_contacts()
+	{
+		for (int rows = 0; rows != dgv->Rows->Count; rows++)
+			for (int cells = 0; cells != dgv->Columns->Count; cells++)
+			{
+				if (dgv->Columns[cells]->HeaderText == "Фамилия") contacts[rows]->surname = dgv->Rows[rows]->Cells[cells]->Value->ToString();
+				else if (dgv->Columns[cells]->HeaderText == "Имя") contacts[rows]->name = dgv->Rows[rows]->Cells[cells]->Value->ToString();
+				else if (dgv->Columns[cells]->HeaderText == "Отчество") contacts[rows]->patronymic = dgv->Rows[rows]->Cells[cells]->Value->ToString();
+				else if (dgv->Columns[cells]->HeaderText == "Телефон") contacts[rows]->phone = dgv->Rows[rows]->Cells[cells]->Value->ToString();
+				else if (dgv->Columns[cells]->HeaderText == "E-Mail") contacts[rows]->email = dgv->Rows[rows]->Cells[cells]->Value->ToString();
+			}
+	}
 	//При нажатии на кнопку добавления вызывается форма добавления контакта
 	private: System::Void add_contact_Click(System::Object^ sender, System::EventArgs^ e) {
 		int start_length = contacts->Length;
@@ -290,7 +320,9 @@ namespace CppCLRWinFormsProject {
 		adf->ShowDialog();
 		adf->get_data(contacts);
 		if (start_length != contacts->Length)
-			dgv->Rows->Add(contacts[contacts->Length - 1]->surname, contacts[contacts->Length - 1]->name, contacts[contacts->Length - 1]->patronymic, contacts[contacts->Length - 1]->phone, contacts[contacts->Length - 1]->email);
+		{
+			add_row(contacts[contacts->Length - 1]);
+		}
 	}
 	//При нажатии на иконку телефона, вызывается/скрывается меню
 	private: System::Void Menu_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -327,6 +359,109 @@ namespace CppCLRWinFormsProject {
 		else
 			this->Menu->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(82)),
 				static_cast<System::Int32>(static_cast<System::Byte>(82)), static_cast<System::Int32>(static_cast<System::Byte>(82)));
+	}
+	//Ограничивает запись имени
+	private: System::Void Name_KeyPress(System::Object^ sender, System::Windows::Forms::KeyPressEventArgs^ e) {
+		if (!Char::IsLetter(e->KeyChar) && e->KeyChar != 0x08)
+			e->Handled = true;
+	}
+	//Ограничивает запись телефона
+	private: System::Void Phone_KeyPress(System::Object^ sender, System::Windows::Forms::KeyPressEventArgs^ e) {
+		TextBox^ tb = dynamic_cast<TextBox^> (dgv->EditingControl);
+		if (e->KeyChar == '+' && !tb->Text->Contains("+") && tb->SelectionStart == 0);
+		else if (!Char::IsDigit(e->KeyChar) && e->KeyChar != 0x08)
+			e->Handled = true;
+	}
+	//Ограничивает запись емейла
+	private: System::Void Email_KeyPress(System::Object^ sender, System::Windows::Forms::KeyPressEventArgs^ e) {
+		TextBox^ tb = dynamic_cast<TextBox^> (dgv->EditingControl);
+		if (e->KeyChar == '@' && !tb->Text->Contains("@") && tb->SelectionStart != 0);
+		else if (e->KeyChar == '.' && tb->SelectionStart != 0)
+		{
+			if (tb->Text[tb->SelectionStart - 1] == '.') e->Handled = true;
+			else if (tb->SelectionStart != tb->Text->Length)
+				if (tb->Text[tb->SelectionStart] == '.') e->Handled = true;
+			if (tb->Text->Contains("@") && tb->Text[tb->SelectionStart - 1] == '@'
+				|| tb->Text->Contains("@") && tb->Text[tb->SelectionStart] == '@')
+				e->Handled = true;
+		}
+		else if (!Char::IsLetter(e->KeyChar) && !Char::IsDigit(e->KeyChar) && e->KeyChar != 0x08 && e->KeyChar != '_' && e->KeyChar != '-')
+			e->Handled = true;
+	}
+	//Добавляет событие текстбоксу клетки dgv
+	private: System::Void dgv_EditingControlShowing(System::Object^ sender, System::Windows::Forms::DataGridViewEditingControlShowingEventArgs^ e) {
+		TextBox^ tb = dynamic_cast<TextBox^> (e->Control);
+		tb->KeyPress -= gcnew System::Windows::Forms::KeyPressEventHandler(this, &base::Name_KeyPress);
+		tb->KeyPress -= gcnew System::Windows::Forms::KeyPressEventHandler(this, &base::Phone_KeyPress);
+		tb->KeyPress -= gcnew System::Windows::Forms::KeyPressEventHandler(this, &base::Email_KeyPress);
+		if (dgv->CurrentCell->ColumnIndex <= 2)
+			tb->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &base::Name_KeyPress);
+		else if (dgv->CurrentCell->ColumnIndex == 3)
+			tb->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &base::Phone_KeyPress);
+		else if (dgv->CurrentCell->ColumnIndex == 4)
+			tb->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &base::Email_KeyPress);
+	}
+	//После окончания изменения клетки, идёт проверка и синхронизация с массивом
+	private: System::Void dgv_CellEndEdit(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e) {
+		if (dgv->Columns[e->ColumnIndex]->HeaderText == "Фамилия")
+		{
+			if (dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value)
+				contacts[e->RowIndex]->surname = dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString();
+			else contacts[e->RowIndex]->surname = "";
+		}
+		else if (dgv->Columns[e->ColumnIndex]->HeaderText == "Имя")
+		{
+			if (dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value)
+				contacts[e->RowIndex]->name = dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString();
+			else contacts[e->RowIndex]->name = "";
+		}
+		else if (dgv->Columns[e->ColumnIndex]->HeaderText == "Отчество")
+		{
+			if (dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value)
+				contacts[e->RowIndex]->patronymic = dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString();
+			else contacts[e->RowIndex]->patronymic = "";
+		}
+		else if (dgv->Columns[e->ColumnIndex]->HeaderText == "Телефон")
+		{
+			if (dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value)
+			{
+				if (dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString() != "+")
+					contacts[e->RowIndex]->phone = dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString();
+				else
+				{
+					MessageBox::Show("Введён неправильный формат телефона", "Ошибка изменения клетки", MessageBoxButtons::OK, MessageBoxIcon::Error);
+					dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value = contacts[e->RowIndex]->phone;
+				}
+			}
+			else contacts[e->RowIndex]->phone = "";
+		}
+		else if (dgv->Columns[e->ColumnIndex]->HeaderText == "E-Mail")
+		{
+			if (dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value)
+			{
+				if (email_load_check(dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString()))
+					contacts[e->RowIndex]->email = dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString();
+				else
+				{
+					MessageBox::Show("Введён неправильный формат емейла", "Ошибка изменения клетки", MessageBoxButtons::OK, MessageBoxIcon::Error);
+					dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value = contacts[e->RowIndex]->email;
+				}
+			}
+			else contacts[e->RowIndex]->email = "";
+		}
+		if (contacts[e->RowIndex]->surname == "" && contacts[e->RowIndex]->name == "" && contacts[e->RowIndex]->patronymic == "" && contacts[e->RowIndex]->phone == "" && contacts[e->RowIndex]->email == "")
+		{
+			dgv->Rows->RemoveAt(e->RowIndex);
+		}
+	}
+	//При сортировке обновляется массив
+	private: System::Void dgv_Sorted(System::Object^ sender, System::EventArgs^ e) {
+		refresh_contacts();
+	}
+	//При удалении строки, удаляется индекс массива
+	private: System::Void dgv_RowsRemoved(System::Object^ sender, System::Windows::Forms::DataGridViewRowsRemovedEventArgs^ e) {
+		for (int i = 0; i != e->RowCount; i++)
+			delete_index(contacts, e->RowIndex + i);
 	}
 	};
 }

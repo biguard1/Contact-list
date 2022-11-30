@@ -72,3 +72,17 @@ bool email_load_check(System::String^ email)
 	else return 1;
 	return 0;
 }
+
+System::Void delete_index(array<Contact^>^% mass, int index)
+{
+	if (mass->Length)
+	{
+		array<Contact^>^% temp = gcnew array<Contact^>(mass->Length - 1);
+		for (int i = 0; i != temp->Length; i++)
+		{
+			if (i < index) temp[i] = mass[i];
+			else temp[i] = mass[i + 1];
+		}
+		mass = temp;
+	}
+}

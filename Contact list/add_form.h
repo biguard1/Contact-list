@@ -349,6 +349,9 @@ namespace CppCLRWinFormsProject {
 			if (Email->Text[Email->SelectionStart - 1] == '.') e->Handled = true;
 			else if (Email->SelectionStart != Email->Text->Length)
 				if (Email->Text[Email->SelectionStart] == '.') e->Handled = true;
+			if (Email->Text->Contains("@") && Email->Text[Email->SelectionStart - 1] == '@' 
+				|| Email->Text->Contains("@") && Email->Text[Email->SelectionStart] == '@')
+				e->Handled = true;
 		}
 		else if (!Char::IsLetter(e->KeyChar) && !Char::IsDigit(e->KeyChar) && e->KeyChar != 0x08 && e->KeyChar != '_' && e->KeyChar != '-')
 			e->Handled = true;
