@@ -91,13 +91,14 @@
       <Command>
       </Command>
     </PreLinkEvent>
-    <PostBuildEvent>
+    <PostBuildEvent />
+    <PreBuildEvent>
       <Command>
       </Command>
-    </PostBuildEvent>
-    <PreBuildEvent>
-      <Command>xcopy "$(ProjectDir)Images" "$(OutDir)Images" /E /H /C /I</Command>
     </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>xcopy "$(ProjectDir)Images" "$(OutDir)Images" /E /H /C /I</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -139,8 +140,12 @@
     </Link>
     <PreBuildEvent />
     <PreBuildEvent>
-      <Command>xcopy "$(ProjectDir)Images" "$(OutDir)Images" /E /H /C /I</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>xcopy "$(ProjectDir)Images" "$(OutDir)Images" /E /H /C /I</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ResourceCompile Include="app.rc" />
