@@ -174,9 +174,4 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
-  <PropertyGroup>
-    <PostBuildEvent>
-      Copy /Y "$(SolutionDir)Images\*" "$(TargetDir)Images"
-    </PostBuildEvent>
-  </PropertyGroup>
 </Project>
