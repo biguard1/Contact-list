@@ -61,6 +61,8 @@ namespace CppCLRWinFormsProject {
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Phone;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Email;
 	private: System::Windows::Forms::ToolTip^ toolTip1;
+	private: System::Windows::Forms::SaveFileDialog^ saveFileDialog1;
+	private: System::Windows::Forms::OpenFileDialog^ openFileDialog1;
 	private: System::ComponentModel::IContainer^ components;
 
 
@@ -92,6 +94,8 @@ namespace CppCLRWinFormsProject {
 			this->load = (gcnew System::Windows::Forms::Button());
 			this->save = (gcnew System::Windows::Forms::Button());
 			this->toolTip1 = (gcnew System::Windows::Forms::ToolTip(this->components));
+			this->saveFileDialog1 = (gcnew System::Windows::Forms::SaveFileDialog());
+			this->openFileDialog1 = (gcnew System::Windows::Forms::OpenFileDialog());
 			this->tableLayoutPanel1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dgv))->BeginInit();
 			this->tableLayoutPanel2->SuspendLayout();
@@ -243,6 +247,7 @@ namespace CppCLRWinFormsProject {
 			this->load->Text = L"🗁";
 			this->toolTip1->SetToolTip(this->load, L"Загрузка контакта");
 			this->load->UseVisualStyleBackColor = false;
+			this->load->Click += gcnew System::EventHandler(this, &base::load_Click);
 			// 
 			// save
 			// 
@@ -265,6 +270,16 @@ namespace CppCLRWinFormsProject {
 			this->save->Text = L"💾";
 			this->toolTip1->SetToolTip(this->save, L"Сохранение контакта");
 			this->save->UseVisualStyleBackColor = false;
+			this->save->Click += gcnew System::EventHandler(this, &base::save_Click);
+			// 
+			// saveFileDialog1
+			// 
+			this->saveFileDialog1->Filter = L"Контакты (.contacts)|*.contacts";
+			// 
+			// openFileDialog1
+			// 
+			this->openFileDialog1->FileName = L"openFileDialog1";
+			this->openFileDialog1->Filter = L"Контакты (.contacts)|*.contacts";
 			// 
 			// base
 			// 
@@ -279,6 +294,7 @@ namespace CppCLRWinFormsProject {
 			this->MinimumSize = System::Drawing::Size(600, 400);
 			this->Name = L"base";
 			this->Text = L"Contact list";
+			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &base::base_FormClosing);
 			this->tableLayoutPanel1->ResumeLayout(false);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dgv))->EndInit();
 			this->tableLayoutPanel2->ResumeLayout(false);
@@ -287,6 +303,25 @@ namespace CppCLRWinFormsProject {
 
 		}
 #pragma endregion
+	private: System::Void save_file()
+	{
+		saveFileDialog1->FileName = "";
+		saveFileDialog1->ShowDialog();
+		if (saveFileDialog1->FileName->Length)
+		{
+			using namespace IO;
+			StreamWriter^ sw = gcnew StreamWriter(saveFileDialog1->FileName);
+			for (int i = 0; i != contacts->Length; i++)
+			{
+				sw->WriteLine(contacts[i]->surname + ";" +
+					contacts[i]->name + ";" +
+					contacts[i]->patronymic + ";" +
+					contacts[i]->phone + ";" +
+					contacts[i]->email);
+			}
+			sw->Close();
+		}
+	}
 	//Добавление строки в список
 	private: System::Void add_row(Contact^% contact)
 	{
@@ -465,5 +500,164 @@ namespace CppCLRWinFormsProject {
 		for (int i = 0; i != e->RowCount; i++)
 			delete_index(contacts, e->RowIndex + i);
 	}
-	};
+	//Сохранение контактов
+	private: System::Void save_Click(System::Object^ sender, System::EventArgs^ e) {
+		if (tableLayoutPanel2->Visible)
+		{
+			tableLayoutPanel2->Hide();
+			this->Menu->ForeColor = System::Drawing::Color::White;
+		}
+		save_file();
+	}
+	//Загрузка контактов
+	private: System::Void load_Click(System::Object^ sender, System::EventArgs^ e) {
+		if (tableLayoutPanel2->Visible)
+		{
+			tableLayoutPanel2->Hide();
+			this->Menu->ForeColor = System::Drawing::Color::White;
+		}
+		openFileDialog1->FileName = "";
+		openFileDialog1->ShowDialog();
+		if (openFileDialog1->FileName->Length)
+		{
+			using namespace IO;
+			if (File::Exists(openFileDialog1->FileName))
+			{
+				StreamReader^ sr = gcnew StreamReader(openFileDialog1->FileName);
+				array<Contact^>^ temp = gcnew array<Contact^>(0);
+				bool error = 0;
+				int row = 0;
+				if (sr->Peek() == -1)
+				{
+					if (MessageBox::Show("Вы выбрали пустой файл, всё равно загрузить (это просто удалит текущие контакты)?", "Ошибка загрузки файла", MessageBoxButtons::YesNo, MessageBoxIcon::Warning) == Windows::Forms::DialogResult::No)
+						error = 1;
+				}
+				while (sr->Peek() != -1 && !error)
+				{
+					String^ str = sr->ReadLine();
+					int i = 0;
+					row++;
+					if (str == "")
+					{
+						if (MessageBox::Show(row + " строка пустая, всё равно продолжить загрузку?", "Ошибка загрузки файла", MessageBoxButtons::YesNo, MessageBoxIcon::Warning) == Windows::Forms::DialogResult::Yes)
+							continue;
+						else {
+							error = 1;
+							break;
+						}
+					}
+					temp->Resize(temp, temp->Length + 1);
+					temp[temp->Length - 1] = gcnew Contact;
+					for (; i != str->Length; i++)
+					{
+						if (str[i] == ';') break;
+						else temp[temp->Length - 1]->surname += str[i];
+					}
+					if (!name_load_check(temp[temp->Length - 1]->surname))
+					{
+						MessageBox::Show("Неверный формат фамилии в " + row + " cтроке (возможны и другие ошибки), дальнейшая загрузка файла невозможна", "Ошибка загрузки файла", MessageBoxButtons::OK, MessageBoxIcon::Error);
+						error = 1;
+						break;
+					}
+					else if (i != str->Length)
+					{
+						for (i++; i != str->Length; i++)
+						{
+							if (str[i] == ';') break;
+							else temp[temp->Length - 1]->name += str[i];
+						}
+						if (!name_load_check(temp[temp->Length - 1]->name))
+						{
+							MessageBox::Show("Неверный формат имени в " + row + " cтроке (возможны и другие ошибки), дальнейшая загрузка файла невозможна", "Ошибка загрузки файла", MessageBoxButtons::OK, MessageBoxIcon::Error);
+							error = 1;
+							break;
+						}
+						else if (i != str->Length)
+						{
+							for (i++; i != str->Length; i++)
+							{
+								if (str[i] == ';') break;
+								else temp[temp->Length - 1]->patronymic += str[i];
+							}
+							if (!name_load_check(temp[temp->Length - 1]->patronymic))
+							{
+								MessageBox::Show("Неверный формат отчества в " + row + " cтроке (возможны и другие ошибки), дальнейшая загрузка файла невозможна", "Ошибка загрузки файла", MessageBoxButtons::OK, MessageBoxIcon::Error);
+								error = 1;
+								break;
+							}
+							else if (i != str->Length)
+							{
+								for (i++; i != str->Length; i++)
+								{
+									if (str[i] == ';') break;
+									else temp[temp->Length - 1]->phone += str[i];
+								}
+								if (!phone_load_check(temp[temp->Length - 1]->phone))
+								{
+									MessageBox::Show("Неверный формат телефона в " + row + " cтроке (возможны и другие ошибки), дальнейшая загрузка файла невозможна", "Ошибка загрузки файла", MessageBoxButtons::OK, MessageBoxIcon::Error);
+									error = 1;
+									break;
+								}
+								else if (i != str->Length)
+								{
+									for (i++; i != str->Length; i++)
+									{
+										if (str[i] == ';') break;
+										else temp[temp->Length - 1]->email += str[i];
+									}
+									if (!email_load_check(temp[temp->Length - 1]->email))
+									{
+										MessageBox::Show("Неверный формат емейла в " + row + " cтроке (возможны и другие ошибки), дальнейшая загрузка файла невозможна", "Ошибка загрузки файла", MessageBoxButtons::OK, MessageBoxIcon::Error);
+										error = 1;
+										break;
+									}
+								}
+								else if (MessageBox::Show(row + " строка имеет неверный формат, всё равно продолжить запись?", "Ошибка загрузки файла", MessageBoxButtons::YesNo, MessageBoxIcon::Warning) == Windows::Forms::DialogResult::No)
+								{
+									error = 1;
+									break;
+								}
+							}
+							else if (MessageBox::Show(row + " строка имеет неверный формат, всё равно продолжить запись?", "Ошибка загрузки файла", MessageBoxButtons::YesNo, MessageBoxIcon::Warning) == Windows::Forms::DialogResult::No)
+							{
+								error = 1;
+								break;
+							}
+						}
+						else if (MessageBox::Show(row + " строка имеет неверный формат, всё равно продолжить запись?", "Ошибка загрузки файла", MessageBoxButtons::YesNo, MessageBoxIcon::Warning) == Windows::Forms::DialogResult::No)
+						{
+							error = 1;
+							break;
+						}
+					}
+					else if (MessageBox::Show(row + " строка имеет неверный формат, всё равно продолжить запись?", "Ошибка загрузки файла", MessageBoxButtons::YesNo, MessageBoxIcon::Warning) == Windows::Forms::DialogResult::No)
+					{
+						error = 1;
+						break;
+					}
+				}
+				sr->Close();
+				if (!error)
+				{
+					for (; dgv->Rows->Count; dgv->Rows->RemoveAt(0));
+					contacts = temp;
+					for (int i = 0; i != contacts->Length; i++)
+						add_row(contacts[i]);
+				}
+			}
+			else MessageBox::Show("Такого файла не существует", "Ошибка загрузки файла", MessageBoxButtons::OK, MessageBoxIcon::Error);
+		}
+	}
+	//При закрытии формы спрашивает, требуется ли сохранить контакты
+	private: System::Void base_FormClosing(System::Object^ sender, System::Windows::Forms::FormClosingEventArgs^ e) {
+		if (contacts->Length)
+		{
+			Windows::Forms::DialogResult result = MessageBox::Show("Желаете ли вы сохранить текущие контакты, перед закрытием?", "Закрытие программы", MessageBoxButtons::YesNoCancel, MessageBoxIcon::Question);
+			if (result == Windows::Forms::DialogResult::Yes)
+				save_file();
+			else if (result == Windows::Forms::DialogResult::Cancel)
+				e->Cancel = true;
+		}
+	}
+};
 }
