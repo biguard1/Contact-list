@@ -375,15 +375,17 @@ namespace CppCLRWinFormsProject {
 	//Ограничивает запись емейла
 	private: System::Void Email_KeyPress(System::Object^ sender, System::Windows::Forms::KeyPressEventArgs^ e) {
 		TextBox^ tb = dynamic_cast<TextBox^> (dgv->EditingControl);
-		if (e->KeyChar == '@' && !tb->Text->Contains("@") && tb->SelectionStart != 0);
-		else if (e->KeyChar == '.' && tb->SelectionStart != 0)
+		if (e->KeyChar == '@' && !tb->Text->Contains("@") && tb->SelectionStart != 0)
 		{
 			if (tb->Text[tb->SelectionStart - 1] == '.') e->Handled = true;
 			else if (tb->SelectionStart != tb->Text->Length)
 				if (tb->Text[tb->SelectionStart] == '.') e->Handled = true;
-			if (tb->Text->Contains("@") && tb->Text[tb->SelectionStart - 1] == '@'
-				|| tb->Text->Contains("@") && tb->Text[tb->SelectionStart] == '@')
-				e->Handled = true;
+		}
+		else if (e->KeyChar == '.' && tb->SelectionStart != 0)
+		{
+			if (tb->Text[tb->SelectionStart - 1] == '.' || tb->Text[tb->SelectionStart - 1] == '@') e->Handled = true;
+			else if (tb->SelectionStart != tb->Text->Length)
+				if (tb->Text[tb->SelectionStart] == '.' || tb->Text[tb->SelectionStart] == '@') e->Handled = true;
 		}
 		else if (!Char::IsLetter(e->KeyChar) && !Char::IsDigit(e->KeyChar) && e->KeyChar != 0x08 && e->KeyChar != '_' && e->KeyChar != '-')
 			e->Handled = true;

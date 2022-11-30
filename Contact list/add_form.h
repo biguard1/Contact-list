@@ -343,15 +343,17 @@ namespace CppCLRWinFormsProject {
 	}
 	//Ограничивает запись емейла
 	private: System::Void Email_KeyPress(System::Object^ sender, System::Windows::Forms::KeyPressEventArgs^ e) {
-		if (e->KeyChar == '@' && !Email->Text->Contains("@") && Email->SelectionStart != 0);
-		else if (e->KeyChar == '.' && Email->SelectionStart != 0)
+		if (e->KeyChar == '@' && !Email->Text->Contains("@") && Email->SelectionStart != 0)
 		{
 			if (Email->Text[Email->SelectionStart - 1] == '.') e->Handled = true;
 			else if (Email->SelectionStart != Email->Text->Length)
 				if (Email->Text[Email->SelectionStart] == '.') e->Handled = true;
-			if (Email->Text->Contains("@") && Email->Text[Email->SelectionStart - 1] == '@' 
-				|| Email->Text->Contains("@") && Email->Text[Email->SelectionStart] == '@')
-				e->Handled = true;
+		}
+		else if (e->KeyChar == '.' && Email->SelectionStart != 0)
+		{
+			if (Email->Text[Email->SelectionStart - 1] == '.' || Email->Text[Email->SelectionStart - 1] == '@') e->Handled = true;
+			else if (Email->SelectionStart != Email->Text->Length)
+				if (Email->Text[Email->SelectionStart] == '.' || Email->Text[Email->SelectionStart] == '@') e->Handled = true;
 		}
 		else if (!Char::IsLetter(e->KeyChar) && !Char::IsDigit(e->KeyChar) && e->KeyChar != 0x08 && e->KeyChar != '_' && e->KeyChar != '-')
 			e->Handled = true;
