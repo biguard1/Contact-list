@@ -87,12 +87,16 @@
       <EntryPointSymbol>main</EntryPointSymbol>
     </Link>
     <PreBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy "$(ProjectDir)Images" "$(OutputPath)Images" /E /H /C /I</Command>
     </PreBuildEvent>
     <PreLinkEvent>
-      <Command>xcopy "$(ProjectDir)Images" "$(OutDir)Images" /E /H /C /I</Command>
+      <Command>
+      </Command>
     </PreLinkEvent>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -132,6 +136,9 @@
       <SubSystem>Windows</SubSystem>
       <EntryPointSymbol>main</EntryPointSymbol>
     </Link>
+    <PreBuildEvent>
+      <Command>xcopy "$(ProjectDir)Images" "$(OutputPath)Images" /E /H /C /I</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ResourceCompile Include="app.rc" />
