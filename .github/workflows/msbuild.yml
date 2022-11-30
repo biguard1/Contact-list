@@ -2,9 +2,9 @@ name: MSBuild
 
 on:
   push:
-    branches: [ "Images_copying" ]
+    branches: [ "master" ]
   pull_request:
-    branches: [ "Images_copying" ]
+    branches: [ "master" ]
 
 env:
   # Path to the solution file relative to the root of the project.
