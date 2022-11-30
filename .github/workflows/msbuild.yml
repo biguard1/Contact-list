@@ -41,5 +41,5 @@ jobs:
     - name: Project artifact
       uses: actions/upload-artifact@v3
       with:
-        name: Contact list
-        path: x64/
+        name: Contact list (${{env.BUILD_CONFIGURATION}})
+        path: x64/${{env.BUILD_CONFIGURATION}}
