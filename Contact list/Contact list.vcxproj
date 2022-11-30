@@ -87,8 +87,12 @@
       <EntryPointSymbol>main</EntryPointSymbol>
     </Link>
     <PreBuildEvent>
-      <Command>xcopy "$(ProjectDir)Images" "$(OutDir)Images" /E /H /C /I</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
+    <PreLinkEvent>
+      <Command>xcopy "$(ProjectDir)Images" "$(OutDir)Images" /E /H /C /I</Command>
+    </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
