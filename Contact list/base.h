@@ -251,9 +251,9 @@ namespace CppCLRWinFormsProject {
 			// 
 			// save
 			// 
-			this->save->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(34)), static_cast<System::Int32>(static_cast<System::Byte>(34)),
-				static_cast<System::Int32>(static_cast<System::Byte>(34)));
+			this->save->BackColor = System::Drawing::Color::DarkGray;
 			this->save->Cursor = System::Windows::Forms::Cursors::Hand;
+			this->save->Enabled = false;
 			this->save->FlatAppearance->BorderSize = 0;
 			this->save->FlatAppearance->MouseDownBackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)));
@@ -270,6 +270,7 @@ namespace CppCLRWinFormsProject {
 			this->save->Text = L"💾";
 			this->toolTip1->SetToolTip(this->save, L"Сохранение контакта");
 			this->save->UseVisualStyleBackColor = false;
+			this->save->EnabledChanged += gcnew System::EventHandler(this, &base::save_EnabledChanged);
 			this->save->Click += gcnew System::EventHandler(this, &base::save_Click);
 			// 
 			// saveFileDialog1
@@ -353,13 +354,21 @@ namespace CppCLRWinFormsProject {
 	private: System::Void add_contact_Click(System::Object^ sender, System::EventArgs^ e) {
 		int start_length = contacts->Length;
 		add_form^ adf = gcnew add_form;
+		if (tableLayoutPanel2->Visible)
+		{
+			tableLayoutPanel2->Hide();
+			this->Menu->ForeColor = System::Drawing::Color::White;
+		}
 		adf->ShowDialog();
 		adf->get_data(contacts);
 		if (start_length != contacts->Length)
 		{
 			delete_equals(contacts);
 			if (start_length != contacts->Length)
+			{
 				add_row(contacts[contacts->Length - 1]);
+				save->Enabled = !save->Enabled;
+			}
 		}
 	}
 	//При нажатии на иконку телефона, вызывается/скрывается меню
@@ -502,6 +511,8 @@ namespace CppCLRWinFormsProject {
 	private: System::Void dgv_RowsRemoved(System::Object^ sender, System::Windows::Forms::DataGridViewRowsRemovedEventArgs^ e) {
 		for (int i = 0; i != e->RowCount; i++)
 			delete_index(contacts, e->RowIndex + i);
+		if (contacts->Length) save->Enabled = true;
+		else save->Enabled = false;
 	}
 	//Сохранение контактов
 	private: System::Void save_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -650,6 +661,8 @@ namespace CppCLRWinFormsProject {
 					delete_equals(contacts);
 					for (int i = 0; i != contacts->Length; i++)
 						add_row(contacts[i]);
+					if (contacts->Length) save->Enabled = true;
+					else save->Enabled = false;
 				}
 			}
 			else MessageBox::Show("Такого файла не существует", "Ошибка загрузки файла", MessageBoxButtons::OK, MessageBoxIcon::Error);
@@ -666,5 +679,16 @@ namespace CppCLRWinFormsProject {
 				e->Cancel = true;
 		}
 	}
-};
+	//Кнопка загрузки меняет цвет, когда становится недоступной
+	private: System::Void save_EnabledChanged(System::Object^ sender, System::EventArgs^ e) {
+		if (save->Enabled) {
+			this->save->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(34)), static_cast<System::Int32>(static_cast<System::Byte>(34)),
+				static_cast<System::Int32>(static_cast<System::Byte>(34)));
+		}
+		else
+		{
+			this->save->BackColor = System::Drawing::Color::DarkGray;
+		}
+	}
+	};
 }
