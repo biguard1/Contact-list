@@ -42,4 +42,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: Contact list
-        path: .x64/
+        path: x64/
