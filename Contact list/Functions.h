@@ -86,3 +86,18 @@ System::Void delete_index(array<Contact^>^% mass, int index)
 		mass = temp;
 	}
 }
+
+System::Void delete_equals(array<Contact^>^% mass)
+{
+	for (int i = 0; i != mass->Length; i++)
+		for (int j = i + 1; j != mass->Length; j++)
+			if (mass[i]->surname == mass[j]->surname &&
+				mass[i]->name == mass[j]->name &&
+				mass[i]->patronymic == mass[j]->patronymic &&
+				mass[i]->phone == mass[j]->phone &&
+				mass[i]->email == mass[j]->email)
+			{
+				delete_index(mass, j);
+				j--;
+			}
+}

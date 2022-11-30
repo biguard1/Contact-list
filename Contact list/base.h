@@ -303,6 +303,7 @@ namespace CppCLRWinFormsProject {
 
 		}
 #pragma endregion
+	//Сохранение файла
 	private: System::Void save_file()
 	{
 		saveFileDialog1->FileName = "";
@@ -356,7 +357,9 @@ namespace CppCLRWinFormsProject {
 		adf->get_data(contacts);
 		if (start_length != contacts->Length)
 		{
-			add_row(contacts[contacts->Length - 1]);
+			delete_equals(contacts);
+			if (start_length != contacts->Length)
+				add_row(contacts[contacts->Length - 1]);
 		}
 	}
 	//При нажатии на иконку телефона, вызывается/скрывается меню
@@ -527,6 +530,9 @@ namespace CppCLRWinFormsProject {
 				array<Contact^>^ temp = gcnew array<Contact^>(0);
 				bool error = 0;
 				int row = 0;
+				if (contacts->Length)
+					if (MessageBox::Show("Желаете совместить контакты из файла с текущими файлами?", "Заагрузка файла", MessageBoxButtons::YesNo, MessageBoxIcon::Question) == Windows::Forms::DialogResult::Yes)
+						temp = contacts;
 				if (sr->Peek() == -1)
 				{
 					if (MessageBox::Show("Вы выбрали пустой файл, всё равно загрузить (это просто удалит текущие контакты)?", "Ошибка загрузки файла", MessageBoxButtons::YesNo, MessageBoxIcon::Warning) == Windows::Forms::DialogResult::No)
@@ -641,6 +647,7 @@ namespace CppCLRWinFormsProject {
 				{
 					for (; dgv->Rows->Count; dgv->Rows->RemoveAt(0));
 					contacts = temp;
+					delete_equals(contacts);
 					for (int i = 0; i != contacts->Length; i++)
 						add_row(contacts[i]);
 				}
