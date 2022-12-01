@@ -447,6 +447,10 @@ namespace CppCLRWinFormsProject {
 		adf->get_data(contacts);
 		if (start_length != contacts->Length)
 		{
+			add_row(contacts[contacts->Length - 1]);
+			save->Enabled = true;
+			fav->add_row(contacts[contacts->Length - 1]);
+			fav->save->Enabled = true;
 			for (int i = 0; i != contacts->Length - 1; i++)
 				if (contacts[i]->surname == contacts[contacts->Length - 1]->surname &&
 					contacts[i]->name == contacts[contacts->Length - 1]->name &&
@@ -454,16 +458,9 @@ namespace CppCLRWinFormsProject {
 					contacts[i]->phone == contacts[contacts->Length - 1]->phone &&
 					contacts[i]->email == contacts[contacts->Length - 1]->email)
 				{
-					delete_index(contacts, i);
+					dgv->Rows->RemoveAt(i);
 					break;
 				}
-			if (start_length != contacts->Length)
-			{
-				add_row(contacts[contacts->Length - 1]);
-				save->Enabled = true;
-				fav->add_row(contacts[contacts->Length - 1]);
-				fav->save->Enabled = true;
-			}
 		}
 	}
 	//Сохранение файла
@@ -577,17 +574,23 @@ namespace CppCLRWinFormsProject {
 		adf->get_data(contacts);
 		if (start_length != contacts->Length)
 		{
-			delete_equals(contacts);
-			if (start_length != contacts->Length)
+			add_row(contacts[contacts->Length - 1]);
+			save->Enabled = true;
+			if (contacts[contacts->Length - 1]->favourite)
 			{
-				add_row(contacts[contacts->Length - 1]);
-				save->Enabled = true;
-				if (contacts[contacts->Length - 1]->favourite)
-				{
-					fav->add_row(contacts[contacts->Length - 1]);
-					fav->save->Enabled = true;
-				}
+				fav->add_row(contacts[contacts->Length - 1]);
+				fav->save->Enabled = true;
 			}
+			for (int i = 0; i != contacts->Length - 1; i++)
+				if (contacts[i]->surname == contacts[contacts->Length - 1]->surname &&
+					contacts[i]->name == contacts[contacts->Length - 1]->name &&
+					contacts[i]->patronymic == contacts[contacts->Length - 1]->patronymic &&
+					contacts[i]->phone == contacts[contacts->Length - 1]->phone &&
+					contacts[i]->email == contacts[contacts->Length - 1]->email)
+				{
+					dgv->Rows->RemoveAt(i);
+					break;
+				}
 		}
 	}
 	//При нажатии на иконку телефона, вызывается/скрывается меню
@@ -1052,6 +1055,34 @@ namespace CppCLRWinFormsProject {
 									if (!email_load_check(temp[temp->Length - 1]->email))
 									{
 										MessageBox::Show("Неверный формат емейла в " + row + " cтроке (возможны и другие ошибки), дальнейшая загрузка файла невозможна", "Ошибка загрузки файла", MessageBoxButtons::OK, MessageBoxIcon::Error);
+										error = 1;
+										break;
+									}
+									else if (i != str->Length)
+									{
+										String^ temp_str;
+										for (i++; i != str->Length; i++)
+										{
+											if (str[i] == ';') break;
+											else temp_str += str[i];
+										}
+										if (temp_str == "True" || temp_str == "1")
+										{
+											temp[temp->Length - 1]->favourite = true;
+										}
+										else if (temp_str == "False" || temp_str == "0")
+										{
+											temp[temp->Length - 1]->favourite = false;
+										}
+										else
+										{
+											MessageBox::Show("Неверный формат записи избранного в " + row + " cтроке, дальнейшая загрузка файла невозможна", "Ошибка загрузки файла", MessageBoxButtons::OK, MessageBoxIcon::Error);
+											error = 1;
+											break;
+										}
+									}
+									else if (MessageBox::Show(row + " строка имеет неверный формат, всё равно продолжить запись?", "Ошибка загрузки файла", MessageBoxButtons::YesNo, MessageBoxIcon::Warning) == Windows::Forms::DialogResult::No)
+									{
 										error = 1;
 										break;
 									}
