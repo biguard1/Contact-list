@@ -99,6 +99,7 @@ System::Void delete_equals(array<Contact^>^% mass)
 				mass[i]->phone == mass[j]->phone &&
 				mass[i]->email == mass[j]->email)
 			{
+				if (mass[j]->favourite) mass[i]->favourite = true;
 				delete_index(mass, j);
 				j--;
 			}

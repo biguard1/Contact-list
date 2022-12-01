@@ -19,6 +19,32 @@ namespace CppCLRWinFormsProject {
 	{
 	public: array<Contact^>^ contacts = gcnew array<Contact^>(0); //Массив контактов
 	private: System::Windows::Forms::SaveFileDialog^ saveFileDialog2;
+	private: System::Windows::Forms::DataGridViewCheckBoxColumn^ favourite_column;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Surname;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Forename;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Patronymic;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Phone;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Email;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	public:
 	private: favourite^ fav = gcnew favourite; //Форма с избранными контактами
 	public:
@@ -37,6 +63,9 @@ namespace CppCLRWinFormsProject {
 			this->Icon = Icon->ExtractAssociatedIcon(Application::ExecutablePath);
 			fav->add_contact->Click += gcnew System::EventHandler(this, &base::favourite_add_contact_Click);
 			fav->save->Click += gcnew System::EventHandler(this, &base::favourite_save_Click);
+			fav->dgv->Sorted += gcnew System::EventHandler(this, &base::fav_dgv_Sorted);
+			fav->dgv->CellEndEdit += gcnew System::Windows::Forms::DataGridViewCellEventHandler(this, &base::favourite_dgv_CellEndEdit);
+			fav->dgv->UserDeletingRow += gcnew System::Windows::Forms::DataGridViewRowCancelEventHandler(this, &base::fav_dgv_UserDeletingRow);
 		}
 
 	protected:
@@ -72,12 +101,12 @@ namespace CppCLRWinFormsProject {
 	private: System::Windows::Forms::SaveFileDialog^ saveFileDialog1;
 	private: System::Windows::Forms::OpenFileDialog^ openFileDialog1;
 	private: System::Windows::Forms::Button^ add_contact;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Surname;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Forename;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Patronymic;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Phone;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Email;
-	private: System::Windows::Forms::DataGridViewCheckBoxColumn^ favorite_column;
+
+
+
+
+
+
 
 
 
@@ -108,12 +137,6 @@ namespace CppCLRWinFormsProject {
 			this->Menu = (gcnew System::Windows::Forms::Label());
 			this->favourite_button = (gcnew System::Windows::Forms::Button());
 			this->dgv = (gcnew System::Windows::Forms::DataGridView());
-			this->Surname = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->Forename = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->Patronymic = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->Phone = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->Email = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->favorite_column = (gcnew System::Windows::Forms::DataGridViewCheckBoxColumn());
 			this->tableLayoutPanel2 = (gcnew System::Windows::Forms::TableLayoutPanel());
 			this->load = (gcnew System::Windows::Forms::Button());
 			this->save = (gcnew System::Windows::Forms::Button());
@@ -121,6 +144,12 @@ namespace CppCLRWinFormsProject {
 			this->saveFileDialog1 = (gcnew System::Windows::Forms::SaveFileDialog());
 			this->openFileDialog1 = (gcnew System::Windows::Forms::OpenFileDialog());
 			this->saveFileDialog2 = (gcnew System::Windows::Forms::SaveFileDialog());
+			this->favourite_column = (gcnew System::Windows::Forms::DataGridViewCheckBoxColumn());
+			this->Surname = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->Forename = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->Patronymic = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->Phone = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->Email = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->tableLayoutPanel1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dgv))->BeginInit();
 			this->tableLayoutPanel2->SuspendLayout();
@@ -220,8 +249,8 @@ namespace CppCLRWinFormsProject {
 			this->dgv->AutoSizeColumnsMode = System::Windows::Forms::DataGridViewAutoSizeColumnsMode::Fill;
 			this->dgv->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
 			this->dgv->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(6) {
-				this->Surname, this->Forename,
-					this->Patronymic, this->Phone, this->Email, this->favorite_column
+				this->favourite_column,
+					this->Surname, this->Forename, this->Patronymic, this->Phone, this->Email
 			});
 			this->dgv->Cursor = System::Windows::Forms::Cursors::Default;
 			this->dgv->Location = System::Drawing::Point(0, 62);
@@ -232,38 +261,7 @@ namespace CppCLRWinFormsProject {
 			this->dgv->EditingControlShowing += gcnew System::Windows::Forms::DataGridViewEditingControlShowingEventHandler(this, &base::dgv_EditingControlShowing);
 			this->dgv->RowsRemoved += gcnew System::Windows::Forms::DataGridViewRowsRemovedEventHandler(this, &base::dgv_RowsRemoved);
 			this->dgv->Sorted += gcnew System::EventHandler(this, &base::dgv_Sorted);
-			// 
-			// Surname
-			// 
-			this->Surname->HeaderText = L"Фамилия";
-			this->Surname->Name = L"Surname";
-			// 
-			// Forename
-			// 
-			this->Forename->HeaderText = L"Имя";
-			this->Forename->Name = L"Forename";
-			// 
-			// Patronymic
-			// 
-			this->Patronymic->HeaderText = L"Отчество";
-			this->Patronymic->Name = L"Patronymic";
-			// 
-			// Phone
-			// 
-			this->Phone->HeaderText = L"Телефон";
-			this->Phone->Name = L"Phone";
-			// 
-			// Email
-			// 
-			this->Email->HeaderText = L"E-Mail";
-			this->Email->Name = L"Email";
-			// 
-			// favorite_column
-			// 
-			this->favorite_column->HeaderText = L"Избранное";
-			this->favorite_column->Name = L"favorite_column";
-			this->favorite_column->Resizable = System::Windows::Forms::DataGridViewTriState::True;
-			this->favorite_column->SortMode = System::Windows::Forms::DataGridViewColumnSortMode::Automatic;
+			this->dgv->MouseUp += gcnew System::Windows::Forms::MouseEventHandler(this, &base::dgv_MouseUp);
 			// 
 			// tableLayoutPanel2
 			// 
@@ -346,6 +344,46 @@ namespace CppCLRWinFormsProject {
 			this->saveFileDialog2->Filter = L"Контакты (.contacts)|*.contacts";
 			this->saveFileDialog2->Title = L"Сохранение избранных контактов";
 			// 
+			// favourite_column
+			// 
+			this->favourite_column->AutoSizeMode = System::Windows::Forms::DataGridViewAutoSizeColumnMode::None;
+			this->favourite_column->FillWeight = 23;
+			this->favourite_column->HeaderText = L"☆";
+			this->favourite_column->Name = L"favourite_column";
+			this->favourite_column->Resizable = System::Windows::Forms::DataGridViewTriState::False;
+			this->favourite_column->SortMode = System::Windows::Forms::DataGridViewColumnSortMode::Automatic;
+			this->favourite_column->Width = 23;
+			// 
+			// Surname
+			// 
+			this->Surname->FillWeight = 101.7259F;
+			this->Surname->HeaderText = L"Фамилия";
+			this->Surname->Name = L"Surname";
+			// 
+			// Forename
+			// 
+			this->Forename->FillWeight = 101.7259F;
+			this->Forename->HeaderText = L"Имя";
+			this->Forename->Name = L"Forename";
+			// 
+			// Patronymic
+			// 
+			this->Patronymic->FillWeight = 101.7259F;
+			this->Patronymic->HeaderText = L"Отчество";
+			this->Patronymic->Name = L"Patronymic";
+			// 
+			// Phone
+			// 
+			this->Phone->FillWeight = 101.7259F;
+			this->Phone->HeaderText = L"Телефон";
+			this->Phone->Name = L"Phone";
+			// 
+			// Email
+			// 
+			this->Email->FillWeight = 101.7259F;
+			this->Email->HeaderText = L"E-Mail";
+			this->Email->Name = L"Email";
+			// 
 			// base
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -409,7 +447,16 @@ namespace CppCLRWinFormsProject {
 		adf->get_data(contacts);
 		if (start_length != contacts->Length)
 		{
-			delete_equals(contacts);
+			for (int i = 0; i != contacts->Length - 1; i++)
+				if (contacts[i]->surname == contacts[contacts->Length - 1]->surname &&
+					contacts[i]->name == contacts[contacts->Length - 1]->name &&
+					contacts[i]->patronymic == contacts[contacts->Length - 1]->patronymic &&
+					contacts[i]->phone == contacts[contacts->Length - 1]->phone &&
+					contacts[i]->email == contacts[contacts->Length - 1]->email)
+				{
+					delete_index(contacts, i);
+					break;
+				}
 			if (start_length != contacts->Length)
 			{
 				add_row(contacts[contacts->Length - 1]);
@@ -446,26 +493,75 @@ namespace CppCLRWinFormsProject {
 		dgv->Rows->Add();
 		for (int i = 0; i != dgv->Columns->Count; i++)
 		{
-			if (dgv->Columns[i]->HeaderText == "Фамилия") dgv->Rows[dgv->Rows->Count - 1]->Cells[i]->Value = contact->surname;
-			else if (dgv->Columns[i]->HeaderText == "Имя") dgv->Rows[dgv->Rows->Count - 1]->Cells[i]->Value = contact->name;
-			else if (dgv->Columns[i]->HeaderText == "Отчество") dgv->Rows[dgv->Rows->Count - 1]->Cells[i]->Value = contact->patronymic;
-			else if (dgv->Columns[i]->HeaderText == "Телефон") dgv->Rows[dgv->Rows->Count - 1]->Cells[i]->Value = contact->phone;
-			else if (dgv->Columns[i]->HeaderText == "E-Mail") dgv->Rows[dgv->Rows->Count - 1]->Cells[i]->Value = contact->email;
-			else if (dgv->Columns[i]->HeaderText == "Избранное") dgv->Rows[dgv->Rows->Count - 1]->Cells[i]->Value = contact->favourite;
+			if (dgv->Columns[i]->HeaderText == Surname->HeaderText) dgv->Rows[dgv->Rows->Count - 1]->Cells[i]->Value = contact->surname;
+			else if (dgv->Columns[i]->HeaderText == Forename->HeaderText) dgv->Rows[dgv->Rows->Count - 1]->Cells[i]->Value = contact->name;
+			else if (dgv->Columns[i]->HeaderText == Patronymic->HeaderText) dgv->Rows[dgv->Rows->Count - 1]->Cells[i]->Value = contact->patronymic;
+			else if (dgv->Columns[i]->HeaderText == Phone->HeaderText) dgv->Rows[dgv->Rows->Count - 1]->Cells[i]->Value = contact->phone;
+			else if (dgv->Columns[i]->HeaderText == Email->HeaderText) dgv->Rows[dgv->Rows->Count - 1]->Cells[i]->Value = contact->email;
+			else if (dgv->Columns[i]->HeaderText == favourite_column->HeaderText) dgv->Rows[dgv->Rows->Count - 1]->Cells[i]->Value = contact->favourite;
 		}
 	}
-	//Синхронизация dgv с массивом
+	//Синхронизация массива с dgv
 	private: System::Void refresh_contacts()
 	{
 		for (int rows = 0; rows != dgv->Rows->Count; rows++)
 			for (int cells = 0; cells != dgv->Columns->Count; cells++)
 			{
-				if (dgv->Columns[cells]->HeaderText == "Фамилия") contacts[rows]->surname = dgv->Rows[rows]->Cells[cells]->Value->ToString();
-				else if (dgv->Columns[cells]->HeaderText == "Имя") contacts[rows]->name = dgv->Rows[rows]->Cells[cells]->Value->ToString();
-				else if (dgv->Columns[cells]->HeaderText == "Отчество") contacts[rows]->patronymic = dgv->Rows[rows]->Cells[cells]->Value->ToString();
-				else if (dgv->Columns[cells]->HeaderText == "Телефон") contacts[rows]->phone = dgv->Rows[rows]->Cells[cells]->Value->ToString();
-				else if (dgv->Columns[cells]->HeaderText == "E-Mail") contacts[rows]->email = dgv->Rows[rows]->Cells[cells]->Value->ToString();
-				else if (dgv->Columns[cells]->HeaderText == "Избранное") contacts[rows]->favourite = (bool)dgv->Rows[rows]->Cells[cells]->Value;
+				if (dgv->Columns[cells]->HeaderText == Surname->HeaderText) contacts[rows]->surname = dgv->Rows[rows]->Cells[cells]->Value->ToString();
+				else if (dgv->Columns[cells]->HeaderText == Forename->HeaderText) contacts[rows]->name = dgv->Rows[rows]->Cells[cells]->Value->ToString();
+				else if (dgv->Columns[cells]->HeaderText == Patronymic->HeaderText) contacts[rows]->patronymic = dgv->Rows[rows]->Cells[cells]->Value->ToString();
+				else if (dgv->Columns[cells]->HeaderText == Phone->HeaderText) contacts[rows]->phone = dgv->Rows[rows]->Cells[cells]->Value->ToString();
+				else if (dgv->Columns[cells]->HeaderText == Email->HeaderText) contacts[rows]->email = dgv->Rows[rows]->Cells[cells]->Value->ToString();
+				else if (dgv->Columns[cells]->HeaderText == favourite_column->HeaderText) contacts[rows]->favourite = (bool)dgv->Rows[rows]->Cells[cells]->Value;
+			}
+	}
+	//Синхронизация dgv в избранном с массивом
+	private: System::Void refresh_from_favourite()
+	{
+		for (int rows = 0, i = 0; rows != fav->dgv->Rows->Count;i++)
+			if (contacts[i]->favourite)
+			{
+				for (int cells = 0; cells != fav->dgv->Columns->Count; cells++)
+				{
+					if (fav->dgv->Columns[cells]->HeaderText == Surname->HeaderText) contacts[rows]->surname = fav->dgv->Rows[rows]->Cells[cells]->Value->ToString();
+					else if (fav->dgv->Columns[cells]->HeaderText == Forename->HeaderText) contacts[rows]->name = fav->dgv->Rows[rows]->Cells[cells]->Value->ToString();
+					else if (fav->dgv->Columns[cells]->HeaderText == Patronymic->HeaderText) contacts[rows]->patronymic = fav->dgv->Rows[rows]->Cells[cells]->Value->ToString();
+					else if (fav->dgv->Columns[cells]->HeaderText == Phone->HeaderText) contacts[rows]->phone = fav->dgv->Rows[rows]->Cells[cells]->Value->ToString();
+					else if (fav->dgv->Columns[cells]->HeaderText == Email->HeaderText) contacts[rows]->email = fav->dgv->Rows[rows]->Cells[cells]->Value->ToString();
+				}
+				rows++;
+			}
+	}
+	//Синхронизация dgv в избранном
+	private: System::Void refresh_favourite()
+	{
+		for (int i = 0, rows = 0; rows != fav->dgv->Rows->Count; i++)
+			if (contacts[i]->favourite)
+			{
+				for (int cells = 0; cells != fav->dgv->Columns->Count; cells++)
+				{
+
+					if (fav->dgv->Columns[cells]->HeaderText == Surname->HeaderText) fav->dgv->Rows[rows]->Cells[cells]->Value = contacts[i]->surname;
+					else if (fav->dgv->Columns[cells]->HeaderText == Forename->HeaderText) fav->dgv->Rows[rows]->Cells[cells]->Value = contacts[i]->name;
+					else if (fav->dgv->Columns[cells]->HeaderText == Patronymic->HeaderText) fav->dgv->Rows[rows]->Cells[cells]->Value = contacts[i]->patronymic;
+					else if (fav->dgv->Columns[cells]->HeaderText == Phone->HeaderText) fav->dgv->Rows[rows]->Cells[cells]->Value = contacts[i]->phone;
+					else if (fav->dgv->Columns[cells]->HeaderText == Email->HeaderText) fav->dgv->Rows[rows]->Cells[cells]->Value = contacts[i]->email;
+				}
+				rows++;
+			}
+	}
+	//Синхронизация dgv
+	private: System::Void refresh_dgv()
+	{
+		for (int rows = 0; rows != dgv->Rows->Count; rows++)
+			for (int cells = 0; cells != dgv->Columns->Count; cells++)
+			{
+				if (dgv->Columns[cells]->HeaderText == Surname->HeaderText) dgv->Rows[rows]->Cells[cells]->Value = contacts[rows]->surname;
+				else if (dgv->Columns[cells]->HeaderText == Forename->HeaderText) dgv->Rows[rows]->Cells[cells]->Value = contacts[rows]->name;
+				else if (dgv->Columns[cells]->HeaderText == Patronymic->HeaderText) dgv->Rows[rows]->Cells[cells]->Value = contacts[rows]->patronymic;
+				else if (dgv->Columns[cells]->HeaderText == Phone->HeaderText) dgv->Rows[rows]->Cells[cells]->Value = contacts[rows]->phone;
+				else if (dgv->Columns[cells]->HeaderText == Email->HeaderText) dgv->Rows[rows]->Cells[cells]->Value = contacts[rows]->email;
+				else if (dgv->Columns[cells]->HeaderText == favourite_column->HeaderText) dgv->Rows[rows]->Cells[cells]->Value = contacts[rows]->favourite;
 			}
 	}
 	//При нажатии на кнопку добавления вызывается форма добавления контакта
@@ -560,40 +656,50 @@ namespace CppCLRWinFormsProject {
 		else if (!Char::IsLetter(e->KeyChar) && !Char::IsDigit(e->KeyChar) && e->KeyChar != 0x08 && e->KeyChar != '_' && e->KeyChar != '-')
 			e->Handled = true;
 	}
-	//Добавляет событие текстбоксу клетки dgv
+	//Добавляет события клеткам dgv
 	private: System::Void dgv_EditingControlShowing(System::Object^ sender, System::Windows::Forms::DataGridViewEditingControlShowingEventArgs^ e) {
-		TextBox^ tb = dynamic_cast<TextBox^> (e->Control);
-		tb->KeyPress -= gcnew System::Windows::Forms::KeyPressEventHandler(this, &base::Name_KeyPress);
-		tb->KeyPress -= gcnew System::Windows::Forms::KeyPressEventHandler(this, &base::Phone_KeyPress);
-		tb->KeyPress -= gcnew System::Windows::Forms::KeyPressEventHandler(this, &base::Email_KeyPress);
-		if (dgv->CurrentCell->ColumnIndex <= 2)
-			tb->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &base::Name_KeyPress);
-		else if (dgv->CurrentCell->ColumnIndex == 3)
-			tb->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &base::Phone_KeyPress);
-		else if (dgv->CurrentCell->ColumnIndex == 4)
-			tb->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &base::Email_KeyPress);
+		if (dgv->CurrentCell->ColumnIndex == Surname->Index ||
+			dgv->CurrentCell->ColumnIndex == Forename->Index ||
+			dgv->CurrentCell->ColumnIndex == Patronymic->Index ||
+			dgv->CurrentCell->ColumnIndex == Phone->Index ||
+			dgv->CurrentCell->ColumnIndex == Email->Index)
+		{
+			TextBox^ tb = dynamic_cast<TextBox^> (e->Control);
+			tb->KeyPress -= gcnew System::Windows::Forms::KeyPressEventHandler(this, &base::Name_KeyPress);
+			tb->KeyPress -= gcnew System::Windows::Forms::KeyPressEventHandler(this, &base::Phone_KeyPress);
+			tb->KeyPress -= gcnew System::Windows::Forms::KeyPressEventHandler(this, &base::Email_KeyPress);
+			if (dgv->CurrentCell->ColumnIndex == Surname->Index ||
+				dgv->CurrentCell->ColumnIndex == Forename->Index ||
+				dgv->CurrentCell->ColumnIndex == Patronymic->Index)
+				tb->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &base::Name_KeyPress);
+			else if (dgv->CurrentCell->ColumnIndex == Phone->Index)
+				tb->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &base::Phone_KeyPress);
+			else if (dgv->CurrentCell->ColumnIndex == Email->Index)
+				tb->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &base::Email_KeyPress);
+		}
 	}
 	//После окончания изменения клетки, идёт проверка и синхронизация с массивом
 	private: System::Void dgv_CellEndEdit(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e) {
-		if (dgv->Columns[e->ColumnIndex]->HeaderText == "Фамилия")
+		bool error = 0;
+		if (dgv->Columns[e->ColumnIndex]->HeaderText == Surname->HeaderText)
 		{
 			if (dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value)
 				contacts[e->RowIndex]->surname = dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString();
 			else contacts[e->RowIndex]->surname = "";
 		}
-		else if (dgv->Columns[e->ColumnIndex]->HeaderText == "Имя")
+		else if (dgv->Columns[e->ColumnIndex]->HeaderText == Forename->HeaderText)
 		{
 			if (dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value)
 				contacts[e->RowIndex]->name = dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString();
 			else contacts[e->RowIndex]->name = "";
 		}
-		else if (dgv->Columns[e->ColumnIndex]->HeaderText == "Отчество")
+		else if (dgv->Columns[e->ColumnIndex]->HeaderText == Patronymic->HeaderText)
 		{
 			if (dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value)
 				contacts[e->RowIndex]->patronymic = dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString();
 			else contacts[e->RowIndex]->patronymic = "";
 		}
-		else if (dgv->Columns[e->ColumnIndex]->HeaderText == "Телефон")
+		else if (dgv->Columns[e->ColumnIndex]->HeaderText == Phone->HeaderText)
 		{
 			if (dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value)
 			{
@@ -601,13 +707,14 @@ namespace CppCLRWinFormsProject {
 					contacts[e->RowIndex]->phone = dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString();
 				else
 				{
+					error = 1;
 					MessageBox::Show("Введён неправильный формат телефона", "Ошибка изменения клетки", MessageBoxButtons::OK, MessageBoxIcon::Error);
 					dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value = contacts[e->RowIndex]->phone;
 				}
 			}
 			else contacts[e->RowIndex]->phone = "";
 		}
-		else if (dgv->Columns[e->ColumnIndex]->HeaderText == "E-Mail")
+		else if (dgv->Columns[e->ColumnIndex]->HeaderText == Email->HeaderText)
 		{
 			if (dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value)
 			{
@@ -615,29 +722,224 @@ namespace CppCLRWinFormsProject {
 					contacts[e->RowIndex]->email = dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString();
 				else
 				{
+					error = 1;
 					MessageBox::Show("Введён неправильный формат емейла", "Ошибка изменения клетки", MessageBoxButtons::OK, MessageBoxIcon::Error);
 					dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value = contacts[e->RowIndex]->email;
 				}
 			}
 			else contacts[e->RowIndex]->email = "";
 		}
-		else if (dgv->Columns[e->ColumnIndex]->HeaderText == "Избранное")
-			contacts[e->RowIndex]->favourite = (bool)dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value;
-		if (contacts[e->RowIndex]->surname == "" && contacts[e->RowIndex]->name == "" && contacts[e->RowIndex]->patronymic == "" && contacts[e->RowIndex]->phone == "" && contacts[e->RowIndex]->email == "")
+		else if (dgv->Columns[e->ColumnIndex]->HeaderText == favourite_column->HeaderText)
 		{
-			dgv->Rows->RemoveAt(e->RowIndex);
+			if (contacts[e->RowIndex]->favourite != (bool)dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value)
+			{
+				bool fav_presence = 0;
+				if (contacts[e->RowIndex]->favourite)
+				{
+					int index = -1;
+					for (int i = -1; i != e->RowIndex;)
+					{
+						i++;
+						if (contacts[i]->favourite) index++;
+					}
+					fav->dgv->Rows->RemoveAt(index);
+				}
+				else
+				{
+					fav->add_row(contacts[e->RowIndex]);
+					fav->save->Enabled = true;
+				}
+				contacts[e->RowIndex]->favourite = (bool)dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value;
+				for (int i = 0; i != contacts->Length; i++)
+					if (contacts[i]->favourite)
+					{
+						fav_presence = 1;
+						break;
+					}
+				if (fav_presence) fav->save->Enabled = true;
+				else fav->save->Enabled = false;
+			}
+		}
+		if (!error)
+		{
+			if (contacts[e->RowIndex]->surname == "" && contacts[e->RowIndex]->name == "" && contacts[e->RowIndex]->patronymic == "" && contacts[e->RowIndex]->phone == "" && contacts[e->RowIndex]->email == "")
+			{
+				dgv->Rows->RemoveAt(e->RowIndex);
+				if (contacts->Length)
+				{
+					bool fav_presence = 0;
+					for (int i = 0; i != contacts->Length; i++)
+						if (contacts[i]->favourite)
+						{
+							fav_presence = 1;
+							break;
+						}
+					if (fav_presence) fav->save->Enabled = true;
+					else fav->save->Enabled = false;
+				}
+			}
+			else if (contacts[e->RowIndex]->favourite)
+			{
+				refresh_favourite();
+			}
+		}
+	}
+	//После окончания изменения клетки, идёт проверка и синхронизация с массивом
+	private: System::Void favourite_dgv_CellEndEdit(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e) {
+		bool error = 0;
+		int index = 0;
+		for (int i = -1; i != e->RowIndex; index++)
+		{
+			if (contacts[index]->favourite) i++;
+			if (i == e->RowIndex) break;
+		}
+		if (fav->dgv->Columns[e->ColumnIndex]->HeaderText == Surname->HeaderText)
+		{
+			if (fav->dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value)
+				contacts[index]->surname = fav->dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString();
+			else contacts[index]->surname = "";
+		}
+		else if (fav->dgv->Columns[e->ColumnIndex]->HeaderText == Forename->HeaderText)
+		{
+			if (fav->dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value)
+				contacts[index]->name = fav->dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString();
+			else contacts[index]->name = "";
+		}
+		else if (fav->dgv->Columns[e->ColumnIndex]->HeaderText == Patronymic->HeaderText)
+		{
+			if (fav->dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value)
+				contacts[index]->patronymic = fav->dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString();
+			else contacts[index]->patronymic = "";
+		}
+		else if (fav->dgv->Columns[e->ColumnIndex]->HeaderText == Phone->HeaderText)
+		{
+			if (fav->dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value)
+			{
+				if (fav->dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString() != "+")
+					contacts[index]->phone = fav->dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString();
+				else
+				{
+					error = 1;
+					MessageBox::Show("Введён неправильный формат телефона", "Ошибка изменения клетки", MessageBoxButtons::OK, MessageBoxIcon::Error);
+					fav->dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value = contacts[index]->phone;
+				}
+			}
+			else contacts[index]->phone = "";
+		}
+		else if (fav->dgv->Columns[e->ColumnIndex]->HeaderText == Email->HeaderText)
+		{
+			if (fav->dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value)
+			{
+				if (email_load_check(fav->dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString()))
+					contacts[index]->email = fav->dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString();
+				else
+				{
+					error = 1;
+					MessageBox::Show("Введён неправильный формат емейла", "Ошибка изменения клетки", MessageBoxButtons::OK, MessageBoxIcon::Error);
+					fav->dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value = contacts[index]->email;
+				}
+			}
+			else contacts[index]->email = "";
+		}
+		if (!error)
+		{
+			if (contacts[index]->surname == "" && contacts[index]->name == "" && contacts[index]->patronymic == "" && contacts[index]->phone == "" && contacts[index]->email == "")
+			{
+				dgv->Rows->RemoveAt(index);
+			}
+			else
+			{
+				refresh_dgv();
+			}
 		}
 	}
 	//При сортировке обновляется массив
 	private: System::Void dgv_Sorted(System::Object^ sender, System::EventArgs^ e) {
 		refresh_contacts();
+		refresh_favourite();
+	}
+	//При сортировке избранного обновляется массив
+	private: System::Void fav_dgv_Sorted(System::Object^ sender, System::EventArgs^ e) {
+		refresh_from_favourite();
+		refresh_dgv();
 	}
 	//При удалении строки, удаляется индекс массива
 	private: System::Void dgv_RowsRemoved(System::Object^ sender, System::Windows::Forms::DataGridViewRowsRemovedEventArgs^ e) {
 		for (int i = 0; i != e->RowCount; i++)
-			delete_index(contacts, e->RowIndex + i);
-		if (contacts->Length) save->Enabled = true;
-		else save->Enabled = false;
+		{
+			if (contacts[e->RowIndex]->favourite)
+				for (int i = 0, rows = -1; i != contacts->Length; i++)
+				{
+					if (contacts[i]->favourite) rows++;
+					if (i == e->RowIndex)
+					{
+						fav->dgv->Rows->RemoveAt(rows);
+						break;
+					}
+				}
+			delete_index(contacts, e->RowIndex);
+		}
+		if (!contacts->Length)
+		{
+			save->Enabled = false;
+			fav->save->Enabled = false;
+		}
+		else
+		{
+			bool fav_presence = 0;
+			for (int i = 0; i != contacts->Length; i++)
+				if (contacts[i]->favourite)
+				{
+					fav_presence = 1;
+					break;
+				}
+			if (fav_presence) fav->save->Enabled = true;
+			else fav->save->Enabled = false;
+		}
+	}
+	private: System::Void fav_dgv_UserDeletingRow(System::Object^ sender, System::Windows::Forms::DataGridViewRowCancelEventArgs^ e) {
+		int index = -1;
+		for (int i = -1; i != e->Row->Index;)
+		{
+			index++;
+			if (contacts[index]->favourite) i++;
+		}
+		if (MessageBox::Show("Желаете ли вы удалить контакт полностью?", "Удаление контакта из избранного", MessageBoxButtons::YesNo, MessageBoxIcon::Question) == Windows::Forms::DialogResult::Yes)
+		{
+			dgv->Rows->RemoveAt(index);
+			if (!contacts->Length)
+			{
+				save->Enabled = false;
+				fav->save->Enabled = false;
+			}
+			else
+			{
+				bool fav_presence = 0;
+				for(int i = 0; i != contacts->Length; i++)
+					if (contacts[i]->favourite)
+					{
+						fav_presence = 1;
+						break;
+					}
+				if (!fav_presence) fav->save->Enabled = false;
+			}
+		}
+		else
+		{
+			bool fav_presence = 0;
+			contacts[index]->favourite = false;
+			dgv->Rows[index]->Cells[favourite_column->Index]->Value = false;
+			fav->dgv->Rows->RemoveAt(e->Row->Index);
+			for (int i = 0; i != contacts->Length; i++)
+				if (contacts[i]->favourite)
+				{
+					fav_presence = 1;
+					break;
+				}
+			if (fav_presence) fav->save->Enabled = true;
+			else fav->save->Enabled = false;
+		}
+		e->Cancel = true;
 	}
 	//Сохранение контактов
 	private: System::Void save_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -781,13 +1083,33 @@ namespace CppCLRWinFormsProject {
 				sr->Close();
 				if (!error)
 				{
+					bool fav_prescence;
+					for (; fav->dgv->Rows->Count; dgv->Rows->RemoveAt(0));
 					for (; dgv->Rows->Count; dgv->Rows->RemoveAt(0));
 					contacts = temp;
 					delete_equals(contacts);
 					for (int i = 0; i != contacts->Length; i++)
+					{
 						add_row(contacts[i]);
-					if (contacts->Length) save->Enabled = true;
-					else save->Enabled = false;
+						if (contacts[i]->favourite)
+						{
+							fav->add_row(contacts[i]);
+							fav_prescence = 1;
+						}
+					}
+					if (contacts->Length)
+					{
+						save->Enabled = true;
+						if (fav_prescence)
+							fav->save->Enabled = true;
+						else
+							fav->save->Enabled = false;
+					}
+					else
+					{
+						save->Enabled = false;
+						fav->save->Enabled = false;
+					}
 				}
 			}
 			else MessageBox::Show("Такого файла не существует", "Ошибка загрузки файла", MessageBoxButtons::OK, MessageBoxIcon::Error);
@@ -820,6 +1142,11 @@ namespace CppCLRWinFormsProject {
 		fav->Show();
 		fav->WindowState = FormWindowState::Normal;
 		fav->Activate();
+	}
+	private: System::Void dgv_MouseUp(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
+		if (dgv->CurrentCell)
+			if (dgv->CurrentCell->ColumnIndex == favourite_column->Index)
+				dgv->EndEdit();
 	}
 	};
 }

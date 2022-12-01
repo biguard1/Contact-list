@@ -14,7 +14,7 @@ namespace CppCLRWinFormsProject {
 	/// </summary>
 	public ref class favourite : public System::Windows::Forms::Form
 	{
-		//Отображает, можно ли записывать значения из текстбоксов в массив
+	//Отображает, можно ли записывать значения из текстбоксов в массив
 	private: bool accept_data = 0;
 	public:
 		favourite(void)
@@ -41,7 +41,7 @@ namespace CppCLRWinFormsProject {
 
 	protected:
 
-	private: System::Windows::Forms::DataGridView^ dgv;
+	public: System::Windows::Forms::DataGridView^ dgv;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Surname;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Forename;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Patronymic;
@@ -256,14 +256,14 @@ namespace CppCLRWinFormsProject {
 	//Добавление строки в список
 	public: System::Void add_row(Contact^% contact)
 	{
-		dgv->Rows->Add();
-		for (int i = 0; i != dgv->Columns->Count; i++)
+		this->dgv->Rows->Add();
+		for (int i = 0; i != this->dgv->Columns->Count; i++)
 		{
-			if (dgv->Columns[i]->HeaderText == "Фамилия") dgv->Rows[dgv->Rows->Count - 1]->Cells[i]->Value = contact->surname;
-			else if (dgv->Columns[i]->HeaderText == "Имя") dgv->Rows[dgv->Rows->Count - 1]->Cells[i]->Value = contact->name;
-			else if (dgv->Columns[i]->HeaderText == "Отчество") dgv->Rows[dgv->Rows->Count - 1]->Cells[i]->Value = contact->patronymic;
-			else if (dgv->Columns[i]->HeaderText == "Телефон") dgv->Rows[dgv->Rows->Count - 1]->Cells[i]->Value = contact->phone;
-			else if (dgv->Columns[i]->HeaderText == "E-Mail") dgv->Rows[dgv->Rows->Count - 1]->Cells[i]->Value = contact->email;
+			if (this->dgv->Columns[i]->HeaderText == "Фамилия") dgv->Rows[dgv->Rows->Count - 1]->Cells[i]->Value = contact->surname;
+			else if (this->dgv->Columns[i]->HeaderText == "Имя") dgv->Rows[dgv->Rows->Count - 1]->Cells[i]->Value = contact->name;
+			else if (this->dgv->Columns[i]->HeaderText == "Отчество") dgv->Rows[dgv->Rows->Count - 1]->Cells[i]->Value = contact->patronymic;
+			else if (this->dgv->Columns[i]->HeaderText == "Телефон") dgv->Rows[dgv->Rows->Count - 1]->Cells[i]->Value = contact->phone;
+			else if (this->dgv->Columns[i]->HeaderText == "E-Mail") dgv->Rows[dgv->Rows->Count - 1]->Cells[i]->Value = contact->email;
 		}
 	}
 	//При нажатии на иконку избранного, вызывается/скрывается меню
@@ -361,5 +361,5 @@ namespace CppCLRWinFormsProject {
 		else if (dgv->CurrentCell->ColumnIndex == 4)
 			tb->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &favourite::Email_KeyPress);
 	}
-	};
+};
 }
