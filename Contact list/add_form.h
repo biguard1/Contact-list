@@ -63,27 +63,6 @@ namespace CppCLRWinFormsProject {
 	private: System::Windows::Forms::Button^ favourite_button;
 	private: System::ComponentModel::IContainer^ components;
 
-	protected:
-
-
-	protected:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	private:
 		/// <summary>
 		/// Required designer variable.
@@ -438,5 +417,5 @@ namespace CppCLRWinFormsProject {
 			this->favourite_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 		}
 	}
-};
+	};
 }

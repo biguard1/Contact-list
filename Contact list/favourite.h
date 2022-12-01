@@ -39,30 +39,19 @@ namespace CppCLRWinFormsProject {
 			}
 		}
 
-	protected:
-
 	public: System::Windows::Forms::DataGridView^ dgv;
+	public: System::Windows::Forms::TableLayoutPanel^ tableLayoutPanel2;
+	public: System::Windows::Forms::Button^ save;
+	private: System::Windows::Forms::TableLayoutPanel^ tableLayoutPanel1;
+	public: System::Windows::Forms::Label^ Menu;
+	public: System::Windows::Forms::Button^ add_contact;
+	private: System::Windows::Forms::ToolTip^ toolTip1;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Surname;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Forename;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Patronymic;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Phone;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Email;
-	public: System::Windows::Forms::TableLayoutPanel^ tableLayoutPanel2;
-
-	public: System::Windows::Forms::Button^ save;
-	private: System::Windows::Forms::TableLayoutPanel^ tableLayoutPanel1;
-	public: System::Windows::Forms::Label^ Menu;
-	public: System::Windows::Forms::Button^ add_contact;
-
-
-
-
 	private: System::ComponentModel::IContainer^ components;
-
-	protected:
-
-	protected:
-
 	private:
 		/// <summary>
 		/// Required designer variable.
@@ -76,17 +65,19 @@ namespace CppCLRWinFormsProject {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			this->components = (gcnew System::ComponentModel::Container());
 			this->dgv = (gcnew System::Windows::Forms::DataGridView());
-			this->Surname = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->Forename = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->Patronymic = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->Phone = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->Email = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->tableLayoutPanel2 = (gcnew System::Windows::Forms::TableLayoutPanel());
 			this->save = (gcnew System::Windows::Forms::Button());
 			this->tableLayoutPanel1 = (gcnew System::Windows::Forms::TableLayoutPanel());
 			this->Menu = (gcnew System::Windows::Forms::Label());
 			this->add_contact = (gcnew System::Windows::Forms::Button());
+			this->toolTip1 = (gcnew System::Windows::Forms::ToolTip(this->components));
+			this->Surname = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->Forename = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->Patronymic = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->Phone = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->Email = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dgv))->BeginInit();
 			this->tableLayoutPanel2->SuspendLayout();
 			this->tableLayoutPanel1->SuspendLayout();
@@ -110,31 +101,6 @@ namespace CppCLRWinFormsProject {
 			this->dgv->Size = System::Drawing::Size(589, 304);
 			this->dgv->TabIndex = 2;
 			this->dgv->EditingControlShowing += gcnew System::Windows::Forms::DataGridViewEditingControlShowingEventHandler(this, &favourite::dgv_EditingControlShowing);
-			// 
-			// Surname
-			// 
-			this->Surname->HeaderText = L"Фамилия";
-			this->Surname->Name = L"Surname";
-			// 
-			// Forename
-			// 
-			this->Forename->HeaderText = L"Имя";
-			this->Forename->Name = L"Forename";
-			// 
-			// Patronymic
-			// 
-			this->Patronymic->HeaderText = L"Отчество";
-			this->Patronymic->Name = L"Patronymic";
-			// 
-			// Phone
-			// 
-			this->Phone->HeaderText = L"Телефон";
-			this->Phone->Name = L"Phone";
-			// 
-			// Email
-			// 
-			this->Email->HeaderText = L"E-Mail";
-			this->Email->Name = L"Email";
 			// 
 			// tableLayoutPanel2
 			// 
@@ -171,6 +137,7 @@ namespace CppCLRWinFormsProject {
 			this->save->Size = System::Drawing::Size(57, 57);
 			this->save->TabIndex = 1;
 			this->save->Text = L"💾";
+			this->toolTip1->SetToolTip(this->save, L"Сохранение избранных контактов");
 			this->save->UseVisualStyleBackColor = false;
 			this->save->EnabledChanged += gcnew System::EventHandler(this, &favourite::save_EnabledChanged);
 			// 
@@ -204,6 +171,7 @@ namespace CppCLRWinFormsProject {
 			this->Menu->TabIndex = 0;
 			this->Menu->Text = L"☆";
 			this->Menu->TextAlign = System::Drawing::ContentAlignment::TopCenter;
+			this->toolTip1->SetToolTip(this->Menu, L"Меню");
 			this->Menu->Click += gcnew System::EventHandler(this, &favourite::Menu_Click);
 			this->Menu->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &favourite::Menu_MouseDown);
 			this->Menu->MouseEnter += gcnew System::EventHandler(this, &favourite::Menu_MouseEnter);
@@ -229,7 +197,38 @@ namespace CppCLRWinFormsProject {
 			this->add_contact->Size = System::Drawing::Size(57, 57);
 			this->add_contact->TabIndex = 1;
 			this->add_contact->Text = L"+";
+			this->toolTip1->SetToolTip(this->add_contact, L"Добавление избранного контакта");
 			this->add_contact->UseVisualStyleBackColor = false;
+			// 
+			// Surname
+			// 
+			this->Surname->HeaderText = L"Фамилия";
+			this->Surname->Name = L"Surname";
+			this->Surname->ToolTipText = L"Фамилия";
+			// 
+			// Forename
+			// 
+			this->Forename->HeaderText = L"Имя";
+			this->Forename->Name = L"Forename";
+			this->Forename->ToolTipText = L"Имя";
+			// 
+			// Patronymic
+			// 
+			this->Patronymic->HeaderText = L"Отчество";
+			this->Patronymic->Name = L"Patronymic";
+			this->Patronymic->ToolTipText = L"Отчество";
+			// 
+			// Phone
+			// 
+			this->Phone->HeaderText = L"Телефон";
+			this->Phone->Name = L"Phone";
+			this->Phone->ToolTipText = L"Номер телефона";
+			// 
+			// Email
+			// 
+			this->Email->HeaderText = L"E-Mail";
+			this->Email->Name = L"Email";
+			this->Email->ToolTipText = L"E-Mail";
 			// 
 			// favourite
 			// 

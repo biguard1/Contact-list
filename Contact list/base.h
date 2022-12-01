@@ -18,34 +18,6 @@ namespace CppCLRWinFormsProject {
 	public ref class base : public System::Windows::Forms::Form
 	{
 	public: array<Contact^>^ contacts = gcnew array<Contact^>(0); //Массив контактов
-	private: System::Windows::Forms::SaveFileDialog^ saveFileDialog2;
-	private: System::Windows::Forms::DataGridViewCheckBoxColumn^ favourite_column;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Surname;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Forename;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Patronymic;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Phone;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Email;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	public:
 	private: favourite^ fav = gcnew favourite; //Форма с избранными контактами
 	public:
 		base(void)
@@ -83,41 +55,22 @@ namespace CppCLRWinFormsProject {
 	protected:
 	private: System::Windows::Forms::Label^ Menu;
 	private: System::Windows::Forms::Button^ favourite_button;
-
-
-
 	private: System::Windows::Forms::DataGridView^ dgv;
-
 	private: System::Windows::Forms::TableLayoutPanel^ tableLayoutPanel2;
 	private: System::Windows::Forms::Button^ load;
-
 	private: System::Windows::Forms::Button^ save;
-
-
-
-
-
 	private: System::Windows::Forms::ToolTip^ toolTip1;
 	private: System::Windows::Forms::SaveFileDialog^ saveFileDialog1;
 	private: System::Windows::Forms::OpenFileDialog^ openFileDialog1;
 	private: System::Windows::Forms::Button^ add_contact;
-
-
-
-
-
-
-
-
-
-
-
-
-
 	private: System::ComponentModel::IContainer^ components;
-
-
-
+	private: System::Windows::Forms::SaveFileDialog^ saveFileDialog2;
+	private: System::Windows::Forms::DataGridViewCheckBoxColumn^ favourite_column;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Surname;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Forename;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Patronymic;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Phone;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Email;
 	private:
 		/// <summary>
 		/// Required designer variable.
@@ -301,7 +254,7 @@ namespace CppCLRWinFormsProject {
 			this->load->Size = System::Drawing::Size(57, 57);
 			this->load->TabIndex = 2;
 			this->load->Text = L"🗁";
-			this->toolTip1->SetToolTip(this->load, L"Загрузка контакта");
+			this->toolTip1->SetToolTip(this->load, L"Загрузка контактов");
 			this->load->UseVisualStyleBackColor = false;
 			this->load->Click += gcnew System::EventHandler(this, &base::load_Click);
 			// 
@@ -324,7 +277,7 @@ namespace CppCLRWinFormsProject {
 			this->save->Size = System::Drawing::Size(57, 57);
 			this->save->TabIndex = 1;
 			this->save->Text = L"💾";
-			this->toolTip1->SetToolTip(this->save, L"Сохранение контакта");
+			this->toolTip1->SetToolTip(this->save, L"Сохранение контактов");
 			this->save->UseVisualStyleBackColor = false;
 			this->save->EnabledChanged += gcnew System::EventHandler(this, &base::save_EnabledChanged);
 			this->save->Click += gcnew System::EventHandler(this, &base::save_Click);
@@ -352,6 +305,7 @@ namespace CppCLRWinFormsProject {
 			this->favourite_column->Name = L"favourite_column";
 			this->favourite_column->Resizable = System::Windows::Forms::DataGridViewTriState::False;
 			this->favourite_column->SortMode = System::Windows::Forms::DataGridViewColumnSortMode::Automatic;
+			this->favourite_column->ToolTipText = L"Избранное";
 			this->favourite_column->Width = 23;
 			// 
 			// Surname
@@ -359,30 +313,35 @@ namespace CppCLRWinFormsProject {
 			this->Surname->FillWeight = 101.7259F;
 			this->Surname->HeaderText = L"Фамилия";
 			this->Surname->Name = L"Surname";
+			this->Surname->ToolTipText = L"Фамилия";
 			// 
 			// Forename
 			// 
 			this->Forename->FillWeight = 101.7259F;
 			this->Forename->HeaderText = L"Имя";
 			this->Forename->Name = L"Forename";
+			this->Forename->ToolTipText = L"Имя";
 			// 
 			// Patronymic
 			// 
 			this->Patronymic->FillWeight = 101.7259F;
 			this->Patronymic->HeaderText = L"Отчество";
 			this->Patronymic->Name = L"Patronymic";
+			this->Patronymic->ToolTipText = L"Отчество";
 			// 
 			// Phone
 			// 
 			this->Phone->FillWeight = 101.7259F;
 			this->Phone->HeaderText = L"Телефон";
 			this->Phone->Name = L"Phone";
+			this->Phone->ToolTipText = L"Номер телефона";
 			// 
 			// Email
 			// 
 			this->Email->FillWeight = 101.7259F;
 			this->Email->HeaderText = L"E-Mail";
 			this->Email->Name = L"Email";
+			this->Email->ToolTipText = L"E-Mail";
 			// 
 			// base
 			// 
@@ -900,6 +859,7 @@ namespace CppCLRWinFormsProject {
 			else fav->save->Enabled = false;
 		}
 	}
+	//Когда пользователь удаляет строку в избранном, контакт удаляется из избранного или полностью удаляется
 	private: System::Void fav_dgv_UserDeletingRow(System::Object^ sender, System::Windows::Forms::DataGridViewRowCancelEventArgs^ e) {
 		int index = -1;
 		for (int i = -1; i != e->Row->Index;)
@@ -1170,10 +1130,16 @@ namespace CppCLRWinFormsProject {
 	}
 	//При нажатии кнопки избранного, открывается форма, разворачивается и фокусируется
 	private: System::Void favourite_button_Click(System::Object^ sender, System::EventArgs^ e) {
+		if (tableLayoutPanel2->Visible)
+		{
+			tableLayoutPanel2->Hide();
+			this->Menu->ForeColor = System::Drawing::Color::White;
+		}
 		fav->Show();
 		fav->WindowState = FormWindowState::Normal;
 		fav->Activate();
 	}
+	//Если выбрана клетка избранного в dgv, при отжатии кнопки мыши заканчивается редактирование клетки
 	private: System::Void dgv_MouseUp(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
 		if (dgv->CurrentCell)
 			if (dgv->CurrentCell->ColumnIndex == favourite_column->Index)
