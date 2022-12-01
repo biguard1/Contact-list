@@ -18,13 +18,21 @@ namespace CppCLRWinFormsProject {
 	//Отображает, можно ли записывать значения из текстбоксов в массив
 	private: bool accept_data = 0;
 	public:
-		add_form(void)
+		add_form(bool remove_favourite)
 		{
 			InitializeComponent();
 			//
 			//TODO: Add the constructor code here
 			//
 			this->Icon = Icon->ExtractAssociatedIcon(Application::ExecutablePath);
+			if (remove_favourite)
+			{
+				this->accept->Anchor = System::Windows::Forms::AnchorStyles::None;
+				this->tableLayoutPanel1->RowStyles[1] = (gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 0));
+				this->favourite_button->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(34)), static_cast<System::Int32>(static_cast<System::Byte>(34)),
+					static_cast<System::Int32>(static_cast<System::Byte>(34)));
+				this->Text += " (Favourite)";
+			}
 		}
 
 	protected:
@@ -52,6 +60,7 @@ namespace CppCLRWinFormsProject {
 	private: System::Windows::Forms::TextBox^ Phone;
 	private: System::Windows::Forms::TextBox^ Email;
 	private: System::Windows::Forms::ToolTip^ toolTip1;
+	private: System::Windows::Forms::Button^ favourite_button;
 	private: System::ComponentModel::IContainer^ components;
 
 	protected:
@@ -91,6 +100,7 @@ namespace CppCLRWinFormsProject {
 			this->components = (gcnew System::ComponentModel::Container());
 			this->tableLayoutPanel1 = (gcnew System::Windows::Forms::TableLayoutPanel());
 			this->accept = (gcnew System::Windows::Forms::Button());
+			this->favourite_button = (gcnew System::Windows::Forms::Button());
 			this->tableLayoutPanel2 = (gcnew System::Windows::Forms::TableLayoutPanel());
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->label5 = (gcnew System::Windows::Forms::Label());
@@ -116,21 +126,19 @@ namespace CppCLRWinFormsProject {
 			this->tableLayoutPanel1->ColumnCount = 1;
 			this->tableLayoutPanel1->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent,
 				100)));
-			this->tableLayoutPanel1->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Absolute,
-				20)));
 			this->tableLayoutPanel1->Controls->Add(this->accept, 0, 0);
+			this->tableLayoutPanel1->Controls->Add(this->favourite_button, 0, 1);
 			this->tableLayoutPanel1->Location = System::Drawing::Point(122, 0);
 			this->tableLayoutPanel1->Name = L"tableLayoutPanel1";
-			this->tableLayoutPanel1->RowCount = 1;
-			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 263)));
-			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 263)));
-			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 263)));
+			this->tableLayoutPanel1->RowCount = 2;
+			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 50)));
+			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 50)));
 			this->tableLayoutPanel1->Size = System::Drawing::Size(63, 263);
 			this->tableLayoutPanel1->TabIndex = 0;
 			// 
 			// accept
 			// 
-			this->accept->Anchor = System::Windows::Forms::AnchorStyles::None;
+			this->accept->Anchor = System::Windows::Forms::AnchorStyles::Bottom;
 			this->accept->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(34)), static_cast<System::Int32>(static_cast<System::Byte>(34)),
 				static_cast<System::Int32>(static_cast<System::Byte>(34)));
 			this->accept->Cursor = System::Windows::Forms::Cursors::Hand;
@@ -143,7 +151,7 @@ namespace CppCLRWinFormsProject {
 			this->accept->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 30, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
 			this->accept->ForeColor = System::Drawing::Color::White;
-			this->accept->Location = System::Drawing::Point(3, 103);
+			this->accept->Location = System::Drawing::Point(3, 71);
 			this->accept->Name = L"accept";
 			this->accept->Size = System::Drawing::Size(57, 57);
 			this->accept->TabIndex = 2;
@@ -151,6 +159,31 @@ namespace CppCLRWinFormsProject {
 			this->toolTip1->SetToolTip(this->accept, L"Принять");
 			this->accept->UseVisualStyleBackColor = false;
 			this->accept->Click += gcnew System::EventHandler(this, &add_form::accept_Click);
+			// 
+			// favourite_button
+			// 
+			this->favourite_button->Anchor = System::Windows::Forms::AnchorStyles::Top;
+			this->favourite_button->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(70)), static_cast<System::Int32>(static_cast<System::Byte>(70)),
+				static_cast<System::Int32>(static_cast<System::Byte>(70)));
+			this->favourite_button->Cursor = System::Windows::Forms::Cursors::Hand;
+			this->favourite_button->FlatAppearance->BorderSize = 0;
+			this->favourite_button->FlatAppearance->MouseDownBackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(46)),
+				static_cast<System::Int32>(static_cast<System::Byte>(46)), static_cast<System::Int32>(static_cast<System::Byte>(46)));
+			this->favourite_button->FlatAppearance->MouseOverBackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)),
+				static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)));
+			this->favourite_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->favourite_button->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 30, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->favourite_button->ForeColor = System::Drawing::Color::White;
+			this->favourite_button->Location = System::Drawing::Point(3, 134);
+			this->favourite_button->Name = L"favourite_button";
+			this->favourite_button->Size = System::Drawing::Size(57, 57);
+			this->favourite_button->TabIndex = 3;
+			this->favourite_button->Text = L"☆";
+			this->favourite_button->TextAlign = System::Drawing::ContentAlignment::TopRight;
+			this->toolTip1->SetToolTip(this->favourite_button, L"Добавить в избранное");
+			this->favourite_button->UseVisualStyleBackColor = false;
+			this->favourite_button->Click += gcnew System::EventHandler(this, &add_form::favourite_button_Click);
 			// 
 			// tableLayoutPanel2
 			// 
@@ -302,9 +335,10 @@ namespace CppCLRWinFormsProject {
 			this->ClientSize = System::Drawing::Size(184, 261);
 			this->Controls->Add(this->tableLayoutPanel2);
 			this->Controls->Add(this->tableLayoutPanel1);
-			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::Fixed3D;
+			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
+			this->MaximizeBox = false;
 			this->Name = L"add_form";
-			this->Text = L"Contact list";
+			this->Text = L"Contact adding";
 			this->tableLayoutPanel1->ResumeLayout(false);
 			this->tableLayoutPanel2->ResumeLayout(false);
 			this->tableLayoutPanel2->PerformLayout();
@@ -327,6 +361,13 @@ namespace CppCLRWinFormsProject {
 				contacts[contacts->Length - 1]->patronymic = Patronymic->Text;
 				contacts[contacts->Length - 1]->phone = Phone->Text;
 				contacts[contacts->Length - 1]->email = Email->Text;
+				if (this->favourite_button->BackColor == System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(70)), static_cast<System::Int32>(static_cast<System::Byte>(70)),
+					static_cast<System::Int32>(static_cast<System::Byte>(70))))
+				{
+					contacts[contacts->Length - 1]->favourite = 0;
+				}
+				else contacts[contacts->Length - 1]->favourite = 1;
+
 			}
 		}
 	}
@@ -374,5 +415,28 @@ namespace CppCLRWinFormsProject {
 			Close();
 		}
 	}
-	};
+	//При нажатии кнопки избранного, меняются её цвета
+	private: System::Void favourite_button_Click(System::Object^ sender, System::EventArgs^ e) {
+		if (this->favourite_button->BackColor == System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(70)), static_cast<System::Int32>(static_cast<System::Byte>(70)),
+			static_cast<System::Int32>(static_cast<System::Byte>(70))))
+		{
+			this->favourite_button->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(34)), static_cast<System::Int32>(static_cast<System::Byte>(34)),
+				static_cast<System::Int32>(static_cast<System::Byte>(34)));
+			this->favourite_button->FlatAppearance->MouseDownBackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)),
+				static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)));
+			this->favourite_button->FlatAppearance->MouseOverBackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(46)),
+				static_cast<System::Int32>(static_cast<System::Byte>(46)), static_cast<System::Int32>(static_cast<System::Byte>(46)));
+		}
+		else
+		{
+			this->favourite_button->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(70)), static_cast<System::Int32>(static_cast<System::Byte>(70)),
+				static_cast<System::Int32>(static_cast<System::Byte>(70)));
+			this->favourite_button->FlatAppearance->MouseDownBackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(46)),
+				static_cast<System::Int32>(static_cast<System::Byte>(46)), static_cast<System::Int32>(static_cast<System::Byte>(46)));
+			this->favourite_button->FlatAppearance->MouseOverBackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)),
+				static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)));
+			this->favourite_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+		}
+	}
+};
 }

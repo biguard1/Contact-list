@@ -157,6 +157,9 @@
     <ClInclude Include="add_form.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="favourite.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="Functions.h" />
     <ClInclude Include="Structures.h" />
     <ClInclude Include="pch.h" />
@@ -190,6 +193,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="base.resx">
       <DependentUpon>base.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="favourite.resx">
+      <DependentUpon>favourite.h</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

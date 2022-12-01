@@ -73,6 +73,7 @@ bool email_load_check(System::String^ email)
 	return 0;
 }
 
+//Удаление индекса массива
 System::Void delete_index(array<Contact^>^% mass, int index)
 {
 	if (mass->Length)
@@ -87,6 +88,7 @@ System::Void delete_index(array<Contact^>^% mass, int index)
 	}
 }
 
+//Удаление повторений в массиве
 System::Void delete_equals(array<Contact^>^% mass)
 {
 	for (int i = 0; i != mass->Length; i++)

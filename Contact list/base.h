@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "add_form.h"
 #include "Structures.h"
+#include "favourite.h"
 
 namespace CppCLRWinFormsProject {
 
@@ -17,6 +18,9 @@ namespace CppCLRWinFormsProject {
 	public ref class base : public System::Windows::Forms::Form
 	{
 	public: array<Contact^>^ contacts = gcnew array<Contact^>(0); //Массив контактов
+	private: System::Windows::Forms::SaveFileDialog^ saveFileDialog2;
+	public:
+	private: favourite^ fav = gcnew favourite; //Форма с избранными контактами
 	public:
 		base(void)
 		{
@@ -31,6 +35,8 @@ namespace CppCLRWinFormsProject {
 				this->load->Image = Image::FromFile(".\\Images\\upload30.bmp");
 			}
 			this->Icon = Icon->ExtractAssociatedIcon(Application::ExecutablePath);
+			fav->add_contact->Click += gcnew System::EventHandler(this, &base::favourite_add_contact_Click);
+			fav->save->Click += gcnew System::EventHandler(this, &base::favourite_save_Click);
 		}
 
 	protected:
@@ -47,7 +53,9 @@ namespace CppCLRWinFormsProject {
 	private: System::Windows::Forms::TableLayoutPanel^ tableLayoutPanel1;
 	protected:
 	private: System::Windows::Forms::Label^ Menu;
-	private: System::Windows::Forms::Button^ add_contact;
+	private: System::Windows::Forms::Button^ favourite_button;
+
+
 
 	private: System::Windows::Forms::DataGridView^ dgv;
 
@@ -55,14 +63,28 @@ namespace CppCLRWinFormsProject {
 	private: System::Windows::Forms::Button^ load;
 
 	private: System::Windows::Forms::Button^ save;
+
+
+
+
+
+	private: System::Windows::Forms::ToolTip^ toolTip1;
+	private: System::Windows::Forms::SaveFileDialog^ saveFileDialog1;
+	private: System::Windows::Forms::OpenFileDialog^ openFileDialog1;
+	private: System::Windows::Forms::Button^ add_contact;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Surname;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Forename;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Patronymic;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Phone;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Email;
-	private: System::Windows::Forms::ToolTip^ toolTip1;
-	private: System::Windows::Forms::SaveFileDialog^ saveFileDialog1;
-	private: System::Windows::Forms::OpenFileDialog^ openFileDialog1;
+	private: System::Windows::Forms::DataGridViewCheckBoxColumn^ favorite_column;
+
+
+
+
+
+
+
 	private: System::ComponentModel::IContainer^ components;
 
 
@@ -82,20 +104,23 @@ namespace CppCLRWinFormsProject {
 		{
 			this->components = (gcnew System::ComponentModel::Container());
 			this->tableLayoutPanel1 = (gcnew System::Windows::Forms::TableLayoutPanel());
-			this->Menu = (gcnew System::Windows::Forms::Label());
 			this->add_contact = (gcnew System::Windows::Forms::Button());
+			this->Menu = (gcnew System::Windows::Forms::Label());
+			this->favourite_button = (gcnew System::Windows::Forms::Button());
 			this->dgv = (gcnew System::Windows::Forms::DataGridView());
 			this->Surname = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->Forename = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->Patronymic = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->Phone = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->Email = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->favorite_column = (gcnew System::Windows::Forms::DataGridViewCheckBoxColumn());
 			this->tableLayoutPanel2 = (gcnew System::Windows::Forms::TableLayoutPanel());
 			this->load = (gcnew System::Windows::Forms::Button());
 			this->save = (gcnew System::Windows::Forms::Button());
 			this->toolTip1 = (gcnew System::Windows::Forms::ToolTip(this->components));
 			this->saveFileDialog1 = (gcnew System::Windows::Forms::SaveFileDialog());
 			this->openFileDialog1 = (gcnew System::Windows::Forms::OpenFileDialog());
+			this->saveFileDialog2 = (gcnew System::Windows::Forms::SaveFileDialog());
 			this->tableLayoutPanel1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dgv))->BeginInit();
 			this->tableLayoutPanel2->SuspendLayout();
@@ -106,17 +131,42 @@ namespace CppCLRWinFormsProject {
 			this->tableLayoutPanel1->AutoSize = true;
 			this->tableLayoutPanel1->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
 			this->tableLayoutPanel1->BackColor = System::Drawing::Color::Gray;
-			this->tableLayoutPanel1->ColumnCount = 2;
+			this->tableLayoutPanel1->ColumnCount = 3;
 			this->tableLayoutPanel1->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle()));
 			this->tableLayoutPanel1->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle()));
+			this->tableLayoutPanel1->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle()));
+			this->tableLayoutPanel1->Controls->Add(this->add_contact, 0, 0);
 			this->tableLayoutPanel1->Controls->Add(this->Menu, 0, 0);
-			this->tableLayoutPanel1->Controls->Add(this->add_contact, 1, 0);
+			this->tableLayoutPanel1->Controls->Add(this->favourite_button, 1, 0);
 			this->tableLayoutPanel1->Location = System::Drawing::Point(0, 0);
 			this->tableLayoutPanel1->Name = L"tableLayoutPanel1";
 			this->tableLayoutPanel1->RowCount = 1;
 			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
-			this->tableLayoutPanel1->Size = System::Drawing::Size(126, 63);
+			this->tableLayoutPanel1->Size = System::Drawing::Size(189, 63);
 			this->tableLayoutPanel1->TabIndex = 0;
+			// 
+			// add_contact
+			// 
+			this->add_contact->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(34)), static_cast<System::Int32>(static_cast<System::Byte>(34)),
+				static_cast<System::Int32>(static_cast<System::Byte>(34)));
+			this->add_contact->Cursor = System::Windows::Forms::Cursors::Hand;
+			this->add_contact->FlatAppearance->BorderSize = 0;
+			this->add_contact->FlatAppearance->MouseDownBackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)),
+				static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)));
+			this->add_contact->FlatAppearance->MouseOverBackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(46)),
+				static_cast<System::Int32>(static_cast<System::Byte>(46)), static_cast<System::Int32>(static_cast<System::Byte>(46)));
+			this->add_contact->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->add_contact->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 30, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->add_contact->ForeColor = System::Drawing::Color::White;
+			this->add_contact->Location = System::Drawing::Point(66, 3);
+			this->add_contact->Name = L"add_contact";
+			this->add_contact->Size = System::Drawing::Size(57, 57);
+			this->add_contact->TabIndex = 2;
+			this->add_contact->Text = L"+";
+			this->toolTip1->SetToolTip(this->add_contact, L"Добавление контакта");
+			this->add_contact->UseVisualStyleBackColor = false;
+			this->add_contact->Click += gcnew System::EventHandler(this, &base::add_contact_Click);
 			// 
 			// Menu
 			// 
@@ -137,28 +187,29 @@ namespace CppCLRWinFormsProject {
 			this->Menu->MouseLeave += gcnew System::EventHandler(this, &base::Menu_MouseLeave);
 			this->Menu->MouseUp += gcnew System::Windows::Forms::MouseEventHandler(this, &base::Menu_MouseUp);
 			// 
-			// add_contact
+			// favourite_button
 			// 
-			this->add_contact->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(34)), static_cast<System::Int32>(static_cast<System::Byte>(34)),
+			this->favourite_button->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(34)), static_cast<System::Int32>(static_cast<System::Byte>(34)),
 				static_cast<System::Int32>(static_cast<System::Byte>(34)));
-			this->add_contact->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->add_contact->FlatAppearance->BorderSize = 0;
-			this->add_contact->FlatAppearance->MouseDownBackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)),
+			this->favourite_button->Cursor = System::Windows::Forms::Cursors::Hand;
+			this->favourite_button->FlatAppearance->BorderSize = 0;
+			this->favourite_button->FlatAppearance->MouseDownBackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)));
-			this->add_contact->FlatAppearance->MouseOverBackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(46)),
+			this->favourite_button->FlatAppearance->MouseOverBackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(46)),
 				static_cast<System::Int32>(static_cast<System::Byte>(46)), static_cast<System::Int32>(static_cast<System::Byte>(46)));
-			this->add_contact->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->add_contact->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 30, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->favourite_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->favourite_button->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 30, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->add_contact->ForeColor = System::Drawing::Color::White;
-			this->add_contact->Location = System::Drawing::Point(66, 3);
-			this->add_contact->Name = L"add_contact";
-			this->add_contact->Size = System::Drawing::Size(57, 57);
-			this->add_contact->TabIndex = 1;
-			this->add_contact->Text = L"+";
-			this->toolTip1->SetToolTip(this->add_contact, L"Добавление контакта");
-			this->add_contact->UseVisualStyleBackColor = false;
-			this->add_contact->Click += gcnew System::EventHandler(this, &base::add_contact_Click);
+			this->favourite_button->ForeColor = System::Drawing::Color::White;
+			this->favourite_button->Location = System::Drawing::Point(129, 3);
+			this->favourite_button->Name = L"favourite_button";
+			this->favourite_button->Size = System::Drawing::Size(57, 57);
+			this->favourite_button->TabIndex = 1;
+			this->favourite_button->Text = L"☆";
+			this->favourite_button->TextAlign = System::Drawing::ContentAlignment::TopRight;
+			this->toolTip1->SetToolTip(this->favourite_button, L"Избранное");
+			this->favourite_button->UseVisualStyleBackColor = false;
+			this->favourite_button->Click += gcnew System::EventHandler(this, &base::favourite_button_Click);
 			// 
 			// dgv
 			// 
@@ -168,9 +219,9 @@ namespace CppCLRWinFormsProject {
 				| System::Windows::Forms::AnchorStyles::Right));
 			this->dgv->AutoSizeColumnsMode = System::Windows::Forms::DataGridViewAutoSizeColumnsMode::Fill;
 			this->dgv->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
-			this->dgv->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(5) {
+			this->dgv->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(6) {
 				this->Surname, this->Forename,
-					this->Patronymic, this->Phone, this->Email
+					this->Patronymic, this->Phone, this->Email, this->favorite_column
 			});
 			this->dgv->Cursor = System::Windows::Forms::Cursors::Default;
 			this->dgv->Location = System::Drawing::Point(0, 62);
@@ -206,6 +257,13 @@ namespace CppCLRWinFormsProject {
 			// 
 			this->Email->HeaderText = L"E-Mail";
 			this->Email->Name = L"Email";
+			// 
+			// favorite_column
+			// 
+			this->favorite_column->HeaderText = L"Избранное";
+			this->favorite_column->Name = L"favorite_column";
+			this->favorite_column->Resizable = System::Windows::Forms::DataGridViewTriState::True;
+			this->favorite_column->SortMode = System::Windows::Forms::DataGridViewColumnSortMode::Automatic;
 			// 
 			// tableLayoutPanel2
 			// 
@@ -276,11 +334,17 @@ namespace CppCLRWinFormsProject {
 			// saveFileDialog1
 			// 
 			this->saveFileDialog1->Filter = L"Контакты (.contacts)|*.contacts";
+			this->saveFileDialog1->Title = L"Сохранение контактов";
 			// 
 			// openFileDialog1
 			// 
-			this->openFileDialog1->FileName = L"openFileDialog1";
 			this->openFileDialog1->Filter = L"Контакты (.contacts)|*.contacts";
+			this->openFileDialog1->Title = L"Загрузка контактов";
+			// 
+			// saveFileDialog2
+			// 
+			this->saveFileDialog2->Filter = L"Контакты (.contacts)|*.contacts";
+			this->saveFileDialog2->Title = L"Сохранение избранных контактов";
 			// 
 			// base
 			// 
@@ -304,6 +368,57 @@ namespace CppCLRWinFormsProject {
 
 		}
 #pragma endregion
+	//Сохранение избранных контактов
+	private: System::Void favourite_save_Click(System::Object^ sender, System::EventArgs^ e) {
+		if (fav->tableLayoutPanel2->Visible)
+		{
+			fav->tableLayoutPanel2->Hide();
+			fav->Menu->ForeColor = System::Drawing::Color::White;
+		}
+		saveFileDialog2->FileName = "";
+		saveFileDialog2->ShowDialog();
+		if (saveFileDialog2->FileName->Length)
+		{
+			using namespace IO;
+			StreamWriter^ sw = gcnew StreamWriter(saveFileDialog2->FileName);
+			for (int i = 0; i != contacts->Length; i++)
+			{
+				if (contacts[i]->favourite)
+				{
+					sw->WriteLine(contacts[i]->surname + ";" +
+						contacts[i]->name + ";" +
+						contacts[i]->patronymic + ";" +
+						contacts[i]->phone + ";" +
+						contacts[i]->email + ";" +
+						contacts[i]->favourite);
+				}
+			}
+			sw->Close();
+		}
+	}
+	//При нажатии на кнопку добавления в избранном вызывается форма добавления контакта
+	private: System::Void favourite_add_contact_Click(System::Object^ sender, System::EventArgs^ e) {
+		int start_length = contacts->Length;
+		add_form^ adf = gcnew add_form(1);
+		if (fav->tableLayoutPanel2->Visible)
+		{
+			fav->tableLayoutPanel2->Hide();
+			fav->Menu->ForeColor = System::Drawing::Color::White;
+		}
+		adf->ShowDialog();
+		adf->get_data(contacts);
+		if (start_length != contacts->Length)
+		{
+			delete_equals(contacts);
+			if (start_length != contacts->Length)
+			{
+				add_row(contacts[contacts->Length - 1]);
+				save->Enabled = true;
+				fav->add_row(contacts[contacts->Length - 1]);
+				fav->save->Enabled = true;
+			}
+		}
+	}
 	//Сохранение файла
 	private: System::Void save_file()
 	{
@@ -319,7 +434,8 @@ namespace CppCLRWinFormsProject {
 					contacts[i]->name + ";" +
 					contacts[i]->patronymic + ";" +
 					contacts[i]->phone + ";" +
-					contacts[i]->email);
+					contacts[i]->email + ";" +
+					contacts[i]->favourite);
 			}
 			sw->Close();
 		}
@@ -335,6 +451,7 @@ namespace CppCLRWinFormsProject {
 			else if (dgv->Columns[i]->HeaderText == "Отчество") dgv->Rows[dgv->Rows->Count - 1]->Cells[i]->Value = contact->patronymic;
 			else if (dgv->Columns[i]->HeaderText == "Телефон") dgv->Rows[dgv->Rows->Count - 1]->Cells[i]->Value = contact->phone;
 			else if (dgv->Columns[i]->HeaderText == "E-Mail") dgv->Rows[dgv->Rows->Count - 1]->Cells[i]->Value = contact->email;
+			else if (dgv->Columns[i]->HeaderText == "Избранное") dgv->Rows[dgv->Rows->Count - 1]->Cells[i]->Value = contact->favourite;
 		}
 	}
 	//Синхронизация dgv с массивом
@@ -348,12 +465,13 @@ namespace CppCLRWinFormsProject {
 				else if (dgv->Columns[cells]->HeaderText == "Отчество") contacts[rows]->patronymic = dgv->Rows[rows]->Cells[cells]->Value->ToString();
 				else if (dgv->Columns[cells]->HeaderText == "Телефон") contacts[rows]->phone = dgv->Rows[rows]->Cells[cells]->Value->ToString();
 				else if (dgv->Columns[cells]->HeaderText == "E-Mail") contacts[rows]->email = dgv->Rows[rows]->Cells[cells]->Value->ToString();
+				else if (dgv->Columns[cells]->HeaderText == "Избранное") contacts[rows]->favourite = (bool)dgv->Rows[rows]->Cells[cells]->Value;
 			}
 	}
 	//При нажатии на кнопку добавления вызывается форма добавления контакта
 	private: System::Void add_contact_Click(System::Object^ sender, System::EventArgs^ e) {
 		int start_length = contacts->Length;
-		add_form^ adf = gcnew add_form;
+		add_form^ adf = gcnew add_form(0);
 		if (tableLayoutPanel2->Visible)
 		{
 			tableLayoutPanel2->Hide();
@@ -367,7 +485,12 @@ namespace CppCLRWinFormsProject {
 			if (start_length != contacts->Length)
 			{
 				add_row(contacts[contacts->Length - 1]);
-				save->Enabled = !save->Enabled;
+				save->Enabled = true;
+				if (contacts[contacts->Length - 1]->favourite)
+				{
+					fav->add_row(contacts[contacts->Length - 1]);
+					fav->save->Enabled = true;
+				}
 			}
 		}
 	}
@@ -398,7 +521,7 @@ namespace CppCLRWinFormsProject {
 		this->Menu->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(32)),
 			static_cast<System::Int32>(static_cast<System::Byte>(32)), static_cast<System::Int32>(static_cast<System::Byte>(32)));
 	}
-	//При нажатии кнопки мыши на иконке телефона меняется цвет
+	//При отжатии кнопки мыши на иконке телефона меняется цвет
 	private: System::Void Menu_MouseUp(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
 		if (tableLayoutPanel2->Visible)
 			this->Menu->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(62)),
@@ -498,6 +621,8 @@ namespace CppCLRWinFormsProject {
 			}
 			else contacts[e->RowIndex]->email = "";
 		}
+		else if (dgv->Columns[e->ColumnIndex]->HeaderText == "Избранное")
+			contacts[e->RowIndex]->favourite = (bool)dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value;
 		if (contacts[e->RowIndex]->surname == "" && contacts[e->RowIndex]->name == "" && contacts[e->RowIndex]->patronymic == "" && contacts[e->RowIndex]->phone == "" && contacts[e->RowIndex]->email == "")
 		{
 			dgv->Rows->RemoveAt(e->RowIndex);
@@ -689,6 +814,12 @@ namespace CppCLRWinFormsProject {
 		{
 			this->save->BackColor = System::Drawing::Color::DarkGray;
 		}
+	}
+	//При нажатии кнопки избранного, открывается форма, разворачивается и фокусируется
+	private: System::Void favourite_button_Click(System::Object^ sender, System::EventArgs^ e) {
+		fav->Show();
+		fav->WindowState = FormWindowState::Normal;
+		fav->Activate();
 	}
 	};
 }
