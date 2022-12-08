@@ -645,21 +645,54 @@ namespace CppCLRWinFormsProject {
 		bool error = 0;
 		if (dgv->Columns[e->ColumnIndex]->HeaderText == Surname->HeaderText)
 		{
-			if (dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value)
-				contacts[e->RowIndex]->surname = dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString();
-			else contacts[e->RowIndex]->surname = "";
+			if (!dgv->Rows[e->RowIndex]->Cells[Surname->Index]->Value &&
+				!dgv->Rows[e->RowIndex]->Cells[Forename->Index]->Value &&
+				!dgv->Rows[e->RowIndex]->Cells[Patronymic->Index]->Value)
+			{
+				if (dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value)
+					contacts[e->RowIndex]->surname = dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString();
+				else contacts[e->RowIndex]->surname = "";
+			}
+			else
+			{
+				MessageBox::Show("ФИО пуст\nВ полях ФИО должен быть хотя-бы один символ", "Ошибка изменения клетки", MessageBoxButtons::OK, MessageBoxIcon::Error);
+				error = 1;
+				dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value = contacts[e->RowIndex]->surname;
+			}
 		}
 		else if (dgv->Columns[e->ColumnIndex]->HeaderText == Forename->HeaderText)
 		{
-			if (dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value)
-				contacts[e->RowIndex]->name = dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString();
-			else contacts[e->RowIndex]->name = "";
+			if (!dgv->Rows[e->RowIndex]->Cells[Surname->Index]->Value &&
+				!dgv->Rows[e->RowIndex]->Cells[Forename->Index]->Value &&
+				!dgv->Rows[e->RowIndex]->Cells[Patronymic->Index]->Value)
+			{
+				if (dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value)
+					contacts[e->RowIndex]->name = dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString();
+				else contacts[e->RowIndex]->name = "";
+			}
+			else
+			{
+				MessageBox::Show("ФИО пуст\nВ полях ФИО должен быть хотя-бы один символ", "Ошибка изменения клетки", MessageBoxButtons::OK, MessageBoxIcon::Error);
+				error = 1;
+				dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value = contacts[e->RowIndex]->name;
+			}
 		}
 		else if (dgv->Columns[e->ColumnIndex]->HeaderText == Patronymic->HeaderText)
 		{
+			if (!dgv->Rows[e->RowIndex]->Cells[Surname->Index]->Value &&
+				!dgv->Rows[e->RowIndex]->Cells[Forename->Index]->Value &&
+				!dgv->Rows[e->RowIndex]->Cells[Patronymic->Index]->Value)
+			{
 			if (dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value)
 				contacts[e->RowIndex]->patronymic = dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString();
 			else contacts[e->RowIndex]->patronymic = "";
+			}
+			else
+			{
+				MessageBox::Show("ФИО пуст\nВ полях ФИО должен быть хотя-бы один символ", "Ошибка изменения клетки", MessageBoxButtons::OK, MessageBoxIcon::Error);
+				error = 1;
+				dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value = contacts[e->RowIndex]->patronymic;
+			}
 		}
 		else if (dgv->Columns[e->ColumnIndex]->HeaderText == Phone->HeaderText)
 		{
@@ -760,21 +793,54 @@ namespace CppCLRWinFormsProject {
 		}
 		if (fav->dgv->Columns[e->ColumnIndex]->HeaderText == Surname->HeaderText)
 		{
-			if (fav->dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value)
-				contacts[index]->surname = fav->dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString();
-			else contacts[index]->surname = "";
+			if (!fav->dgv->Rows[e->RowIndex]->Cells[fav->Surname->Index]->Value &&
+				!fav->dgv->Rows[e->RowIndex]->Cells[fav->Forename->Index]->Value &&
+				!fav->dgv->Rows[e->RowIndex]->Cells[fav->Patronymic->Index]->Value)
+			{
+				if (fav->dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value)
+					contacts[index]->surname = fav->dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString();
+				else contacts[index]->surname = "";
+			}
+			else
+			{
+				MessageBox::Show("ФИО пуст\nВ полях ФИО должен быть хотя-бы один символ", "Ошибка изменения клетки", MessageBoxButtons::OK, MessageBoxIcon::Error);
+				error = 1;
+				fav->dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value = contacts[index]->surname;
+			}
 		}
 		else if (fav->dgv->Columns[e->ColumnIndex]->HeaderText == Forename->HeaderText)
 		{
-			if (fav->dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value)
-				contacts[index]->name = fav->dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString();
-			else contacts[index]->name = "";
+			if (!fav->dgv->Rows[e->RowIndex]->Cells[fav->Surname->Index]->Value &&
+				!fav->dgv->Rows[e->RowIndex]->Cells[fav->Forename->Index]->Value &&
+				!fav->dgv->Rows[e->RowIndex]->Cells[fav->Patronymic->Index]->Value)
+			{
+				if (fav->dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value)
+					contacts[index]->name = fav->dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString();
+				else contacts[index]->name = "";
+			}
+			else
+			{
+				MessageBox::Show("ФИО пуст\nВ полях ФИО должен быть хотя-бы один символ", "Ошибка изменения клетки", MessageBoxButtons::OK, MessageBoxIcon::Error);
+				error = 1;
+				fav->dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value = contacts[index]->name;
+			}
 		}
 		else if (fav->dgv->Columns[e->ColumnIndex]->HeaderText == Patronymic->HeaderText)
 		{
-			if (fav->dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value)
-				contacts[index]->patronymic = fav->dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString();
-			else contacts[index]->patronymic = "";
+			if (!fav->dgv->Rows[e->RowIndex]->Cells[fav->Surname->Index]->Value &&
+				!fav->dgv->Rows[e->RowIndex]->Cells[fav->Forename->Index]->Value &&
+				!fav->dgv->Rows[e->RowIndex]->Cells[fav->Patronymic->Index]->Value)
+			{
+				if (fav->dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value)
+					contacts[index]->patronymic = fav->dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString();
+				else contacts[index]->patronymic = "";
+			}
+			else
+			{
+				MessageBox::Show("ФИО пуст\nВ полях ФИО должен быть хотя-бы один символ", "Ошибка изменения клетки", MessageBoxButtons::OK, MessageBoxIcon::Error);
+				error = 1;
+				fav->dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value = contacts[index]->patronymic;
+			}
 		}
 		else if (fav->dgv->Columns[e->ColumnIndex]->HeaderText == Phone->HeaderText)
 		{
@@ -974,6 +1040,7 @@ namespace CppCLRWinFormsProject {
 					}
 					else if (i != str->Length)
 					{
+						int start_i = i;
 						for (i++; i != str->Length; i++)
 						{
 							if (str[i] == ';') break;
@@ -1000,6 +1067,12 @@ namespace CppCLRWinFormsProject {
 							}
 							else if (i != str->Length)
 							{
+								if (str[0] == ';' && str[1] == ';' && str[2] == ';')
+								{
+									MessageBox::Show("Неверный формат ФИО в " + row + " строке, требуется хотя-бы один символ в полях ФИО\nДальнейшая загрузка файла невозможна", "Ошибка загрузки файла", MessageBoxButtons::OK, MessageBoxIcon::Error);
+									error = 1;
+									break;
+								}
 								for (i++; i != str->Length; i++)
 								{
 									if (str[i] == ';') break;
@@ -1059,11 +1132,23 @@ namespace CppCLRWinFormsProject {
 									break;
 								}
 							}
+							else if (i == 2)
+							{
+								MessageBox::Show(row + " строка имеет неверный формат, невозможно продолжить запись", "Ошибка загрузки файла", MessageBoxButtons::OK, MessageBoxIcon::Error);
+								error = 1;
+								break;
+							}
 							else if (MessageBox::Show(row + " строка имеет неверный формат, всё равно продолжить запись?", "Ошибка загрузки файла", MessageBoxButtons::YesNo, MessageBoxIcon::Warning) == Windows::Forms::DialogResult::No)
 							{
 								error = 1;
 								break;
 							}
+						}
+						else if (i == 1)
+						{
+							MessageBox::Show(row + " строка имеет неверный формат, невозможно продолжить запись", "Ошибка загрузки файла", MessageBoxButtons::OK, MessageBoxIcon::Error);
+							error = 1;
+							break;
 						}
 						else if (MessageBox::Show(row + " строка имеет неверный формат, всё равно продолжить запись?", "Ошибка загрузки файла", MessageBoxButtons::YesNo, MessageBoxIcon::Warning) == Windows::Forms::DialogResult::No)
 						{
@@ -1071,11 +1156,17 @@ namespace CppCLRWinFormsProject {
 							break;
 						}
 					}
+					else if (i == 0)
+					{
+						MessageBox::Show(row + " строка имеет неверный формат, невозможно продолжить запись", "Ошибка загрузки файла", MessageBoxButtons::OK, MessageBoxIcon::Error);
+						error = 1;
+						break;
+						}
 					else if (MessageBox::Show(row + " строка имеет неверный формат, всё равно продолжить запись?", "Ошибка загрузки файла", MessageBoxButtons::YesNo, MessageBoxIcon::Warning) == Windows::Forms::DialogResult::No)
 					{
 						error = 1;
 						break;
-					}
+						}
 				}
 				sr->Close();
 				if (!error)

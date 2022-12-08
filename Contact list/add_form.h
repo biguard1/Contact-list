@@ -380,11 +380,38 @@ namespace CppCLRWinFormsProject {
 	}
 	//Если все текстбоксы прошли проверку, закрывает форму
 	private: System::Void accept_Click(System::Object^ sender, System::EventArgs^ e) {
-		if (Phone->Text[0] == '+' && Phone->Text->Length < 11 && Phone->Text->Length || Phone->Text[0] != '+' && Phone->Text->Length < 10 && Phone->Text->Length)
+		if (!Surname->Text->Length && !Forename->Text->Length && !Patronymic->Text->Length)
 		{
-			MessageBox::Show("Введён неправильный формат телефона", "Ошибка добавления контакта", MessageBoxButtons::OK, MessageBoxIcon::Error);
-			if (!email_load_check(Email->Text))
+			MessageBox::Show("ФИО пуст\nВ одном из полей ФИО должен быть хотя-бы один символ", "Ошибка добавления контакта", MessageBoxButtons::OK, MessageBoxIcon::Error);
+			if (Phone->Text->Length)
+			{
+				if (Phone->Text[0] == '+' && Phone->Text->Length < 11 && Phone->Text->Length || Phone->Text[0] != '+' && Phone->Text->Length < 10 && Phone->Text->Length)
+				{
+					MessageBox::Show("Введён неправильный формат телефона", "Ошибка добавления контакта", MessageBoxButtons::OK, MessageBoxIcon::Error);
+					if (!email_load_check(Email->Text))
+						MessageBox::Show("Введён неправильный формат емейла", "Ошибка добавления контакта", MessageBoxButtons::OK, MessageBoxIcon::Error);
+				}
+				else if (!email_load_check(Email->Text))
+					MessageBox::Show("Введён неправильный формат емейла", "Ошибка добавления контакта", MessageBoxButtons::OK, MessageBoxIcon::Error);
+			}
+			else if (!email_load_check(Email->Text))
 				MessageBox::Show("Введён неправильный формат емейла", "Ошибка добавления контакта", MessageBoxButtons::OK, MessageBoxIcon::Error);
+		}
+		else if (Phone->Text->Length)
+		{
+			if (Phone->Text[0] == '+' && Phone->Text->Length < 11 || Phone->Text[0] != '+' && Phone->Text->Length < 10)
+			{
+				MessageBox::Show("Введён неправильный формат телефона", "Ошибка добавления контакта", MessageBoxButtons::OK, MessageBoxIcon::Error);
+				if (!email_load_check(Email->Text))
+					MessageBox::Show("Введён неправильный формат емейла", "Ошибка добавления контакта", MessageBoxButtons::OK, MessageBoxIcon::Error);
+			}
+			else if (!email_load_check(Email->Text))
+				MessageBox::Show("Введён неправильный формат емейла", "Ошибка добавления контакта", MessageBoxButtons::OK, MessageBoxIcon::Error);
+			else
+			{
+				accept_data = 1;
+				Close();
+			}
 		}
 		else if (!email_load_check(Email->Text))
 			MessageBox::Show("Введён неправильный формат емейла", "Ошибка добавления контакта", MessageBoxButtons::OK, MessageBoxIcon::Error);

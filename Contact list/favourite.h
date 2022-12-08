@@ -46,9 +46,9 @@ namespace CppCLRWinFormsProject {
 	public: System::Windows::Forms::Label^ Menu;
 	public: System::Windows::Forms::Button^ add_contact;
 	private: System::Windows::Forms::ToolTip^ toolTip1;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Surname;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Forename;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Patronymic;
+	public: System::Windows::Forms::DataGridViewTextBoxColumn^ Surname;
+	public: System::Windows::Forms::DataGridViewTextBoxColumn^ Forename;
+	public: System::Windows::Forms::DataGridViewTextBoxColumn^ Patronymic;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Phone;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Email;
 	private: System::ComponentModel::IContainer^ components;
