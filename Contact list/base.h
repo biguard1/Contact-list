@@ -665,7 +665,10 @@ namespace CppCLRWinFormsProject {
 		{
 			if (dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value)
 			{
-				if (dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString() != "+")
+				if (dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString()[0] == '+' && 
+					dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString()->Length >= 11 ||
+					dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString()[0] != '+' &&
+					dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString()->Length >= 10)
 					contacts[e->RowIndex]->phone = dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString();
 				else
 				{
@@ -777,7 +780,10 @@ namespace CppCLRWinFormsProject {
 		{
 			if (fav->dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value)
 			{
-				if (fav->dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString() != "+")
+				if (fav->dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString()[0] == '+' &&
+					fav->dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString()->Length >= 11 ||
+					fav->dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString()[0] != '+' &&
+					fav->dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString()->Length >= 10)
 					contacts[index]->phone = fav->dgv->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString();
 				else
 				{

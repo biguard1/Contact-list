@@ -380,7 +380,7 @@ namespace CppCLRWinFormsProject {
 	}
 	//Если все текстбоксы прошли проверку, закрывает форму
 	private: System::Void accept_Click(System::Object^ sender, System::EventArgs^ e) {
-		if (Phone->Text == "+")
+		if (Phone->Text[0] == '+' && Phone->Text->Length < 11 && Phone->Text->Length || Phone->Text[0] != '+' && Phone->Text->Length < 10 && Phone->Text->Length)
 		{
 			MessageBox::Show("Введён неправильный формат телефона", "Ошибка добавления контакта", MessageBoxButtons::OK, MessageBoxIcon::Error);
 			if (!email_load_check(Email->Text))

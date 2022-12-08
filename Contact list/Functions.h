@@ -14,12 +14,14 @@ bool name_load_check(System::String^ name)
 //Проверка телефона на правильность
 bool phone_load_check(System::String^ phone)
 {
-	if (phone == "+") return 0;
+	if (!phone->Length) return 1;
 	for (int i = 0; i != phone->Length; i++)
 	{
 		if (phone[i] == '+' && i == 1) continue;
 		else if (!System::Char::IsDigit(phone[i])) return 0;
 	}
+	if (phone[0] == '+' && phone->Length < 11) return 0;
+	else if (phone->Length < 10) return 0;
 	return 1;
 }
 
